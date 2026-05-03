@@ -10,6 +10,6 @@
 
 ## 规则
 - `health_status.json` 中 `issues` 为空 → 回复 HEARTBEAT_OK
-- `issues` 非空 → 推送 CRITICAL 告警
-- 交易时段 + 单日亏损>5% → 推送 L3 熔断告警
+- `issues` 非空 → 推送 ❗红色告警
+- 交易时段 + 单日亏损>5% → 推送 🚨L3熔断告警
 - 其他情况 → 不推送，无噪音

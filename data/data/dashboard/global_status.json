@@ -1,0 +1,55 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-04-30T04:06:42.071907",
+  "total_capital": {
+    "token_usage": {
+      "used": 0,
+      "budget": 40000000,
+      "percent": 0.0,
+      "level": "normal"
+    },
+    "panel_status": {
+      "localhost:8082": "up"
+    },
+    "last_updated": "2026-04-29T20:05:00",
+    "active_market": "closed",
+    "golden_state": {
+      "exists": false
+    }
+  },
+  "daily_pnl": 0,
+  "token_usage": {
+    "used": 0,
+    "budget": 40000000,
+    "percent": 0
+  },
+  "active_market": "none",
+  "groups": {
+    "risk_control": {
+      "status": "online",
+      "priority": 1
+    },
+    "trade_execution": {
+      "status": "online",
+      "priority": 2
+    },
+    "strategy_research": {
+      "status": "online",
+      "priority": 3
+    },
+    "ai_learning": {
+      "status": "online",
+      "priority": 4
+    }
+  },
+  "strategies": {
+    "BTDR_PrevClose_V2": {
+      "status": "normal",
+      "panel_port": 8082
+    },
+    "LianLian_V4": {
+      "status": "normal",
+      "panel_port": 8082
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-04-30T04:06:42.068780",
+  "circuit_breaker": {
+    "level": "L0",
+    "status": "normal"
+  },
+  "recent_orders": [],
+  "drawdown_monitor": {},
+  "error_loop_counter": {}
+}

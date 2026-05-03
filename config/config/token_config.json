@@ -1,0 +1,37 @@
+{
+  "daily_limit": 40000000,
+  "warning_threshold": 35000000,
+  "critical_threshold": 38000000,
+  "quota": {
+    "core": 0.30,
+    "research": 0.40,
+    "evolution": 0.20,
+    "emergency": 0.10
+  },
+  "baseline": {
+    "task": 394696,
+    "strategy": 498419,
+    "evolution": 387138,
+    "ops": 374359,
+    "backtest": 871587,
+    "exec": 189535,
+    "planning": 708395,
+    "research": 602689,
+    "cron": 107924,
+    "internal": 141111,
+    "error": 119678,
+    "subagent": 133369,
+    "summary": 15828,
+    "heartbeat": 130417,
+    "memory": 27680
+  },
+  "time_factors": {
+    "trading_hours": 1.2,
+    "non_trading_hours": 0.8
+  },
+  "external_brain_ratio": {
+    "trading_hours": 0.40,
+    "non_trading_hours": 0.70
+  },
+  "last_updated": "2026-04-23T16:30:00"
+}

@@ -1,0 +1,30 @@
+# Sensitive data - NEVER commit
+config/notify_config.json
+config/*.secret
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# Logs & data
+data/logs/
+data/history/*.csv
+*.log
+*.log.old
+
+# Windows-specific (not needed on Linux)
+*.bat
+*.ps1
+*.exe
+
+# OS
+.DS_Store
+Thumbs.db
+
+# OpenClaw internal
+.openclaw/

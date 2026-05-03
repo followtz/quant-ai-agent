@@ -1,0 +1,17 @@
+{
+  "strategy_status": "running",
+  "current_price": 0,
+  "btdr_shares": 8000,
+  "btdr_pnl": 0,
+  "turbo_a_active": false,
+  "turbo_b_active": false,
+  "ll_stock_code": "HK.02598",
+  "ll_shares": 8000,
+  "ll_signal": "",
+  "ll_zscore": "",
+  "ll_v3_buy": false,
+  "ll_v3_sell": false,
+  "ll_mr_buy": false,
+  "ll_mr_sell": false,
+  "updated_at": "2026-05-04T01:01:00"
+}

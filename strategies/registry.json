@@ -4,21 +4,43 @@
     "module": "strategies.active.btdr_v2",
     "class": "BTDRPrevCloseV2",
     "type": "rule_based",
-    "status": "active",
+    "status": "production",
     "symbol": "US.BTDR",
-    "description": "BTDR 前收盘价截击策略 V2",
+    "description": "BTDR 前收盘价截击策略 V2 (原版)",
     "created": "2026-04-20",
     "version": "2.0"
   },
+  "BTDR_V2_Optimal": {
+    "name": "BTDR PrevClose V2 - ATR优化",
+    "module": "strategies.active.btdr_v2_optimal",
+    "class": "BTDRPrevCloseOptimal",
+    "type": "rule_based",
+    "status": "active",
+    "symbol": "US.BTDR",
+    "description": "ATR×1.2/×0.4动态阈值, 250天回测+$20,580",
+    "created": "2026-05-04",
+    "version": "2.1"
+  },
   "LianLian_V4": {
-    "name": "连连数字V4",
+    "name": "连连数字V4 (原版)",
     "module": "strategies.active.lianlian_v4",
     "class": "LianLianV4",
     "type": "rule_based",
-    "status": "active",
-    "symbol": "HK.09611",
-    "description": "连连数字趋势跟踪策略 V4",
+    "status": "production",
+    "symbol": "HK.02598",
+    "description": "连连数字三重确认策略 V4 (含ML)",
     "created": "2026-04-15",
     "version": "4.0"
+  },
+  "LianLian_V4_Optimal": {
+    "name": "连连数字V4 优化版",
+    "module": "strategies.active.lianlian_v4_optimized",
+    "class": "LianLianV4Optimized",
+    "type": "rule_based",
+    "status": "active",
+    "symbol": "HK.02598",
+    "description": "V3+MR双确认, ATR×0.7动态阈值, 移除ML",
+    "created": "2026-05-04",
+    "version": "4.1"
   }
 }

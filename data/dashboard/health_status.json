@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-05-04T00:30:23.591867",
+  "open_d": {
+    "running": true,
+    "pid": "215479",
+    "cpu": "1.6",
+    "mem": "1.7"
+  },
+  "gateway_active": true,
+  "disk": {
+    "used_pct": 11,
+    "available": "152G",
+    "ok": true
+  },
+  "memory": {
+    "used_pct": 22.0,
+    "available_mb": 12081,
+    "ok": true
+  },
+  "firewall": true,
+  "issues": [],
+  "healthy": true
+}

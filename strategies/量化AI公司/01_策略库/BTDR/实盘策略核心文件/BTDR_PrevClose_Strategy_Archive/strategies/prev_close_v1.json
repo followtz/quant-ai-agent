@@ -1,0 +1,92 @@
+{
+  "name": "协同 PrevClose V1",
+  "version": "1.0.0",
+  "created_date": "2026-04-12",
+  "description": "涡轮A与涡轮B协同互补PrevClose策略。核心：两者各自独立运行PrevClose平仓条件，无需仓位触发介入即可自然维持平衡。仓位7500-10500作为安全边界。",
+
+  "parameters": {
+    "sell_trigger": {
+      "type": "TurboA",
+      "condition": "price >= prev_close * (1 + sell_threshold)",
+      "sell_threshold_pct": 10,
+      "sell_threshold": 0.10,
+      "unit": "relative_to_prev_close"
+    },
+    "buyback_trigger_A": {
+      "type": "TurboA_buyback",
+      "condition": "price <= prev_close_A_sell_day",
+      "offset_pct": 0,
+      "unit": "exactly_prev_close",
+      "note": "A卖出后，等待价格跌回至卖出当日的前日收盘价（0%溢价）"
+    },
+    "buy_trigger": {
+      "type": "TurboB",
+      "condition": "price <= prev_close * (1 - buy_threshold)",
+      "buy_threshold_pct": 5,
+      "buy_threshold": 0.05,
+      "unit": "relative_to_prev_close"
+    },
+    "sellback_trigger_B": {
+      "type": "TurboB_sellback",
+      "condition": "price >= prev_close_B_buy_day",
+      "offset_pct": 0,
+      "unit": "exactly_prev_close",
+      "note": "B买入后，等待价格反弹至买入当日的前日收盘价（0%溢价）"
+    }
+  },
+
+  "position_limits": {
+    "min": 7000,
+    "max": 11000,
+    "initial": 8894,
+    "balance_lower": 7500,
+    "balance_upper": 10500,
+    "note": "lower/upper为安全边界，正常PrevClose运行时不触发，仅作最后防线"
+  },
+
+  "trading_params": {
+    "shares_per_trade": 1000,
+    "commission_rate": 0.001,
+    "slippage_rate": 0.001,
+    "time_limit_A": null,
+    "time_limit_B": null,
+    "note": "无时间限制；PrevClose无法满足时考虑强制市价平仓"
+  },
+
+  "backtest_results": {
+    "data_period": "2024-11-27 to 2026-04-10",
+    "n_days": 341,
+    "BH_return": -12.06,
+    "total_trades": 10,
+    "TurboA_trades": 5,
+    "TurboB_trades": 7,
+    "win_rate": 100,
+    "gross_PnL_usd": 19103,
+    "cost_usd": 260,
+    "net_PnL_usd": 18843,
+    "excess_return_pct": 9.72,
+    "note": "含0.1%佣金+0.1%滑点；协同机制(7500/10500)从未触发，PrevClose独自完成所有平仓"
+  },
+
+  "key_findings": [
+    "PrevClose条件本身即能完美维持仓位平衡（仓位始终在7894-8894间振荡），lower/upper边界未触发",
+    "lower缩窄至8500/upper至9500（±500股）时触发频繁，140笔交易全部亏损，效果极差",
+    "A卖出后平均等待数天至数月不等，最终均以PrevClose条件完成买回",
+    "B在Phase1期间(1月底崩盘前)触发频繁，贡献主要收益",
+    "S10%触发收益略优于S5%，但差异不大"
+  ],
+
+  "live_trading_notes": [
+    "PrevClose条件在跳空缺口时可能永远无法满足，建议设置30天超时强制市价平仓",
+    "使用当日收盘价替代前日收盘价可避免T+1数据延迟问题",
+    "建议监控：A或B单方向持仓超过30天未平仓时报警",
+    "实盘前需用分钟级数据验证日内PrevClose可达成性"
+  ],
+
+  "next_optimization_directions": [
+    "PrevClose偏移量：尝试A买回=前收-1%（而非精确前收）能否提高成交率",
+    "时间限制混合：5天内PrevClose，否则市价平仓",
+    "触发阈值：测试S8%/B3%等中间值",
+    "分阶段自适应：Phase3暴跌期用更激进参数，Phase2/4暴涨期用更保守参数"
+  ]
+}

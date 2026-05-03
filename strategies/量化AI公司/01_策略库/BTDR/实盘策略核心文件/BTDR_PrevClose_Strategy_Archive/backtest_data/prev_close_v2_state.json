@@ -1,0 +1,21 @@
+{
+  "date": "2026-04-12",
+  "turbo_A": {
+    "active": false,
+    "entry_price": 0,
+    "pending_qty": 0,
+    "days_held": 0
+  },
+  "turbo_B": {
+    "active": false,
+    "entry_price": 0,
+    "pending_qty": 0,
+    "days_held": 0
+  },
+  "pnl": 0,
+  "trades": 0,
+  "total_pnl": 0,
+  "total_trades": 0,
+  "last_close": 10.33,
+  "shares": 8894
+}

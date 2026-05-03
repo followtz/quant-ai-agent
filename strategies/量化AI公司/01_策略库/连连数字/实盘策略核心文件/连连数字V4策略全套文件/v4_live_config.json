@@ -1,0 +1,83 @@
+{
+  "strategy_name": "连连数字V4双重确认",
+  "version": "4.0",
+  "description": "整合V3涡轮 + ML信号过滤 + 均值回归三重机制，双重确认后执行交易",
+  
+  "stock_code": "HK.02598",
+  "stock_name": "连连数字",
+  
+  "account": {
+    "account_id": 281756477947279377,
+    "account_suffix": "1697",
+    "account_type": "MARGIN",
+    "markets": ["HK", "US"]
+  },
+  
+  "position": {
+    "base_position": 8000,
+    "min_position": 6000,
+    "max_position": 10000,
+    "trade_qty": 1000,
+    "initial_cash": 100000
+  },
+  
+  "v3_params": {
+    "enabled": true,
+    "threshold": 0.03,
+    "ma_lookback": 20,
+    "description": "价格偏离20日均线3%触发信号（20260420优化：5%→3%，回测收益率+3.5%）"
+  },
+  
+  "mean_reversion_params": {
+    "enabled": true,
+    "lookback": 20,
+    "threshold": 2.0,
+    "description": "Z-Score超过±2.0触发均值回归信号"
+  },
+  
+  "ml_params": {
+    "enabled": true,
+    "confidence": 0.5,
+    "model": "RandomForest",
+    "retrain_interval_days": 7,
+    "description": "机器学习预测趋势方向，置信度>50%触发信号"
+  },
+  
+  "confirmation": {
+    "count": 2,
+    "description": "任意两个信号为真时执行交易（双重确认）"
+  },
+  
+  "risk_control": {
+    "max_daily_trades": 2,
+    "stop_loss": 0.15,
+    "max_drawdown": 0.25,
+    "circuit_breaker": {
+      "daily_loss_limit": 5000,
+      "single_trade_limit": 10000
+    }
+  },
+  
+  "trading_hours": {
+    "hk_pre_market": "09:00-09:30",
+    "hk_morning": "09:30-12:00",
+    "hk_afternoon": "13:00-16:00",
+    "check_interval_seconds": 60
+  },
+  
+  "backtest_results": {
+    "strategy_return": "+3.67%",
+    "excess_return": "+40.28%",
+    "max_drawdown": "-16.99%",
+    "total_trades": 43,
+    "win_rate": "33.3%",
+    "comparison": {
+      "v3_ml_original": "+25.87%",
+      "mean_reversion_only": "-3.81%",
+      "buy_hold": "-36.91%"
+    }
+  },
+  
+  "created_at": "2026-04-11",
+  "updated_at": "2026-04-20"
+}

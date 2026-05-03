@@ -1,0 +1,2 @@
+BTDR实时监控面板为http://localhost:8080/
+连连数字实时监控面板为http://localhost:8081/

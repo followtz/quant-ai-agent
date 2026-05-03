@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量化交易监控面板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1419; color: #e6e6e6; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; }
+        .header h1 { font-size: 26px; margin-bottom: 6px; }
+        .header p { opacity: 0.8; font-size: 13px; }
+        .strategies { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 20px; }
+        .strategy-card { background: #1a1f2e; border-radius: 12px; padding: 18px; border: 1px solid #2d3748; }
+        .strategy-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #2d3748; }
+        .strategy-name { font-size: 16px; font-weight: 600; }
+        .strategy-symbol { color: #8892b0; font-size: 13px; margin-top: 2px; }
+        .status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+        .status.running { background: #10b981; color: white; }
+        .status.stopped { background: #ef4444; color: white; }
+        .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+        .metric { background: #0f1419; padding: 10px; border-radius: 8px; }
+        .metric-label { font-size: 11px; color: #8892b0; margin-bottom: 3px; }
+        .metric-value { font-size: 18px; font-weight: 600; }
+        .metric-value.positive { color: #10b981; }
+        .metric-value.negative { color: #ef4444; }
+        .param-box { background: #0f1419; border-radius: 8px; padding: 10px; margin-bottom: 10px; font-size: 12px; }
+        .param-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #1e2a3a; }
+        .param-row:last-child { border-bottom: none; }
+        .param-key { color: #8892b0; }
+        .param-val { color: #e6e6e6; font-weight: 500; }
+        .controls { display: flex; gap: 8px; margin-top: 10px; }
+        .btn { flex: 1; padding: 9px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.8; }
+        .btn-start { background: #10b981; color: white; }
+        .btn-stop { background: #ef4444; color: white; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .last-update { text-align: center; margin-top: 24px; color: #8892b0; font-size: 12px; }
+        .signals { margin-top: 10px; background: #0f1419; border-radius: 8px; padding: 8px; max-height: 120px; overflow-y: auto; font-size: 11px; }
+        .signal { padding: 3px 0; border-bottom: 1px solid #1e2a3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .signal:last-child { border-bottom: none; }
+        .signal-time { color: #667eea; margin-right: 6px; }
+        .signal-msg { color: #e6e6e6; }
+        .tag-v2 { background: #667eea; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 6px; }
+        .tag-v3 { background: #f59e0b; color: #1a1f2e; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 6px; }
+        .pnl-row { display: flex; gap: 10px; }
+        .pnl-row .metric { flex: 1; }
+        .trigger-box { background: #1a2332; border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-top: 8px; }
+        .trigger-title { font-size: 12px; color: #667eea; margin-bottom: 6px; font-weight: 600; }
+        .trigger-row { display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0; }
+        .trigger-label { color: #8892b0; }
+        .trigger-val { color: #10b981; font-weight: 600; }
+        .trigger-val.cur { color: #fbbf24; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>量化交易监控面板 <span class="tag-v2">V2策略</span></h1>
+        <p>PrevClose涡轮协同策略 | BTDR</p>
+    </div>
+    <div class="strategies" id="strategies"></div>
+    <div class="last-update">最后更新: <span id="lastUpdate">-</span></div>
+
+    <script>
+        let data = {};
+        function fmt(n) {
+            if (n === null || n === undefined) return '-';
+            return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        function fmtT(iso) {
+            if (!iso) return '-';
+            return new Date(iso).toLocaleTimeString('zh-CN');
+        }
+
+        function render() {
+            const c = document.getElementById('strategies');
+            c.innerHTML = '';
+            for (const [key, d] of Object.entries(data)) {
+                const card = document.createElement('div');
+                card.className = 'strategy-card';
+
+                // 计算昨收触发价
+                let triggerHtml = '';
+                if (d.last_close && d.last_price) {
+                    const lc = d.last_close;
+                    triggerHtml = `<div class="trigger-box">
+                        <div class="trigger-title">V2 触发条件 (昨收$${fmt(lc)})</div>
+                        <div class="trigger-row"><span class="trigger-label">A卖出触发 &gt;=</span><span class="trigger-val">$${fmt(lc*1.12)}</span></div>
+                        <div class="trigger-row"><span class="trigger-label">A买回目标 &lt;=</span><span class="trigger-val">$${fmt(lc*0.99)}</span></div>
+                        <div class="trigger-row"><span class="trigger-label">B买入触发 &lt;=</span><span class="trigger-val">$${fmt(lc*0.95)}</span></div>
+                        <div class="trigger-row"><span class="trigger-label">B卖出目标 &gt;=</span><span class="trigger-val">$${fmt(lc*1.05)}</span></div>
+                        <div class="trigger-row"><span class="trigger-label">当前价</span><span class="trigger-val cur">$${fmt(d.last_price)}</span></div>
+                    </div>`;
+                }
+
+                // Turbo状态
+                const aState = d.turbo_A || {};
+                const bState = d.turbo_B || {};
+                let turboHtml = '';
+                if (d.strategy === 'prev_close_v2') {
+                    turboHtml = `<div style="display:flex;gap:8px;margin-bottom:8px;font-size:12px;">
+                        <div style="flex:1;background:#0f1419;padding:6px;border-radius:6px;">
+                            <div style="color:#8892b0;margin-bottom:2px;">涡轮A</div>
+                            <div style="color:${aState.active?'#10b981':'#8892b0'}">${aState.active?'已卖出 $'+fmt(aState.entry_price):'待命'}</div>
+                            <div style="color:#667eea;font-size:11px;margin-top:2px;">${aState.active?'持有'+aState.days_held+'天':''}</div>
+                        </div>
+                        <div style="flex:1;background:#0f1419;padding:6px;border-radius:6px;">
+                            <div style="color:#8892b0;margin-bottom:2px;">涡轮B</div>
+                            <div style="color:${bState.active?'#10b981':'#8892b0'}">${bState.active?'已买入 $'+fmt(bState.entry_price):'待命'}</div>
+                            <div style="color:#f59e0b;font-size:11px;margin-top:2px;">${bState.active?'持有'+bState.days_held+'天':''}</div>
+                        </div>
+                    </div>`;
+                }
+
+                // 信号
+                let signalsHtml = '';
+                if (d.signals && d.signals.length > 0) {
+                    signalsHtml = `<div class="signals">` + d.signals.slice(-8).reverse().map(s => `
+                        <div class="signal"><span class="signal-time">${s.time||''}</span><span class="signal-msg">${s.msg||''}</span></div>
+                    `).join('') + `</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="strategy-header">
+                        <div>
+                            <div class="strategy-name">${d.name}</div>
+                            <div class="strategy-symbol">${d.symbol}</div>
+                        </div>
+                        <span class="status ${d.status}">${d.status==='running'?'运行中':'已停止'}</span>
+                    </div>
+
+                    <div class="metrics">
+                        <div class="metric"><div class="metric-label">最新价</div><div class="metric-value">${d.last_price?'$'+fmt(d.last_price):'-'}</div></div>
+                        <div class="metric"><div class="metric-label">持仓</div><div class="metric-value">${fmt(d.position)}股</div></div>
+                        <div class="metric"><div class="metric-label">市值</div><div class="metric-value">${d.market_value?'$'+fmt(d.market_value):'-'}</div></div>
+                    </div>
+
+                    <div class="pnl-row" style="margin-bottom:8px;">
+                        <div class="metric"><div class="metric-label">今日盈亏</div><div class="metric-value ${d.today_pnl>=0?'positive':'negative'}">${d.today_pnl>=0?'+':''}$${fmt(d.today_pnl)}</div></div>
+                        <div class="metric"><div class="metric-label">累计盈亏</div><div class="metric-value ${d.total_pnl>=0?'positive':'negative'}">${d.total_pnl>=0?'+':''}$${fmt(d.total_pnl)}</div></div>
+                        <div class="metric"><div class="metric-label">交易</div><div class="metric-value">${d.today_trades||0}笔/共${d.total_trades||0}笔</div></div>
+                    </div>
+
+                    ${turboHtml}
+                    ${triggerHtml}
+                    ${signalsHtml}
+
+                    <div class="controls">
+                        <button class="btn btn-start" onclick="startStr('${key}')" ${d.status==='running'?'disabled':''}>▶ 启动</button>
+                        <button class="btn btn-stop" onclick="stopStr('${key}')" ${d.status!=='running'?'disabled':''}>⏹ 停止</button>
+                    </div>
+                `;
+                c.appendChild(card);
+            }
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('zh-CN');
+        }
+
+        async function fetchStatus() {
+            try {
+                const r = await fetch('/api/status');
+                data = await r.json();
+                render();
+            } catch (e) { console.error(e); }
+        }
+
+        async function startStr(k) {
+            const r = await fetch('/api/start/' + k);
+            const j = await r.json();
+            alert(j.message);
+            setTimeout(fetchStatus, 1500);
+        }
+
+        async function stopStr(k) {
+            if (!confirm('确定停止该策略?')) return;
+            const r = await fetch('/api/stop/' + k);
+            const j = await r.json();
+            alert(j.message);
+            setTimeout(fetchStatus, 1500);
+        }
+
+        fetchStatus();
+        setInterval(fetchStatus, 5000);
+    </script>
+</body>
+</html>

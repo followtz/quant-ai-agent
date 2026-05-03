@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-04-14 04:05:13",
+  "checks": [
+    {
+      "name": "BTDR策略面板",
+      "pid": 608,
+      "processRunning": true,
+      "webAccessible": true,
+      "cpu": 2231.91,
+      "memoryMB": 27.57,
+      "startTime": "2026-04-12 10:48:14",
+      "status": "正常"
+    },
+    {
+      "name": "连连数字策略面板",
+      "pid": 4468,
+      "processRunning": false,
+      "webAccessible": false,
+      "status": "异常：进程未运行"
+    },
+    {
+      "name": "富途OpenD",
+      "pid": 3900,
+      "processRunning": true,
+      "status": "正常"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "last_rebalance": null,
+  "allocations": {},
+  "risk_budget": {
+    "BTDR_V2": {
+      "risk_share": 0.6,
+      "vol_adjustment": 1.469516019907911,
+      "allocation": 0.3,
+      "target_value": 104700.0
+    },
+    "LL_V4": {
+      "risk_share": 0.4,
+      "vol_adjustment": 1.0286612139355376,
+      "allocation": 0.25,
+      "target_value": 87250.0
+    }
+  },
+  "performance": {},
+  "alerts": [
+    {
+      "type": "rebalance",
+      "strategy": "BTDR_V2",
+      "current_weight": 0.4269340974212034,
+      "target_weight": 0.3,
+      "deviation": 0.12693409742120343,
+      "action": "decrease",
+      "message": "BTDR_V2权重偏离12.7%，建议减仓"
+    },
+    {
+      "type": "rebalance",
+      "strategy": "LL_V4",
+      "current_weight": 0.5730659025787965,
+      "target_weight": 0.25,
+      "deviation": 0.3230659025787965,
+      "action": "decrease",
+      "message": "LL_V4权重偏离32.3%，建议减仓"
+    }
+  ],
+  "last_check": "2026-04-21T21:44:15.104692",
+  "portfolio": {
+    "total_value": 349000,
+    "total_pnl_today": -400,
+    "total_pnl_total": -34030,
+    "pnl_today_pct": -0.001146131805157593,
+    "pnl_total_pct": -0.09750716332378223,
+    "weights": {
+      "BTDR_V2": 0.4269340974212034,
+      "LL_V4": 0.5730659025787965
+    },
+    "volatility": 0.3402480770718873,
+    "correlation": 0.35,
+    "strategies": {
+      "BTDR_V2": {
+        "strategy_id": "BTDR_V2",
+        "name": "BTDR PrevClose V2",
+        "market": "US",
+        "position": 7894,
+        "cash": 50000,
+        "market_value": 99000,
+        "pnl_today": -1200,
+        "pnl_total": -39230,
+        "trades_today": 0,
+        "volatility": 0.5,
+        "total_value": 149000
+      },
+      "LL_V4": {
+        "strategy_id": "LL_V4",
+        "name": "连连数字V4双重确认",
+        "market": "HK",
+        "position": 8000,
+        "cash": 80000,
+        "market_value": 120000,
+        "pnl_today": 800,
+        "pnl_total": 5200,
+        "trades_today": 0,
+        "volatility": 0.35,
+        "total_value": 200000
+      }
+    },
+    "timestamp": "2026-04-21T21:44:13.273084"
+  }
+}

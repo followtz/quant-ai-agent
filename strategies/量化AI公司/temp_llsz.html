@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>连连数字V4双重确认 - 监控面板</title>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="5">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header .subtitle { opacity: 0.8; font-size: 14px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #1a1f3a;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #2a3050;
+        }
+        .card h2 {
+            font-size: 16px;
+            color: #8892b0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-running { background: #00d084; color: #000; }
+        .status-stopped { background: #ff4757; color: #fff; }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a3050;
+        }
+        .metric:last-child { border-bottom: none; }
+        .metric-label { color: #8892b0; }
+        .metric-value { font-weight: bold; font-size: 18px; }
+        .positive { color: #00d084; }
+        .negative { color: #ff4757; }
+
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .signal-box {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            background: #2a3050;
+        }
+        .signal-box.active {
+            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+            color: #000;
+        }
+        .signal-box.inactive {
+            background: #2a3050;
+            color: #8892b0;
+        }
+        .signal-name { font-size: 12px; margin-bottom: 5px; }
+        .signal-status { font-weight: bold; }
+
+        .real-account-card {
+            background: linear-gradient(135deg, #1a1f3a 0%, #2a3050 100%);
+            border: 2px solid #667eea;
+        }
+        .real-account-card h2 {
+            color: #667eea;
+        }
+
+        .position-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #2a3050;
+            font-size: 14px;
+        }
+        .position-code { font-weight: bold; }
+        .position-pl { font-weight: bold; }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #8892b0;
+            font-size: 12px;
+        }
+
+        .refresh-info {
+            text-align: center;
+            color: #8892b0;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .account-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .account-item {
+            background: #2a3050;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .account-item .label { font-size: 12px; color: #8892b0; }
+        .account-item .value { font-size: 16px; font-weight: bold; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>连连数字V4双重确认</h1>
+        <div class="subtitle">V3涡轮 + ML信号 + 均值回归 | 实盘账户数据</div>
+    </div>
+
+    <div class="refresh-info">页面每5秒自动刷新 | 最后更新: 2026-04-13 14:47:53</div>
+
+    <div class="grid">
+        <!-- 策略状态 -->
+        <div class="card">
+            <h2>策略状态</h2>
+            <div class="metric">
+                <span class="metric-label">运行状态</span>
+                <span class="status-badge status-running">
+                    运行中
+                </span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">进程ID</span>
+                <span class="metric-value">9988</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">最后更新</span>
+                <span class="metric-value">-</span>
+            </div>
+        </div>
+
+        <!-- 配置持仓（旧） -->
+        <div class="card">
+            <h2>策略配置持仓</h2>
+            <div class="metric">
+                <span class="metric-label">配置持仓</span>
+                <span class="metric-value">8000 股</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">配置现金</span>
+                <span class="metric-value">$100000.00</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">持仓范围</span>
+                <span class="metric-value">6,000 - 10,000 股</span>
+            </div>
+        </div>
+
+        <!-- 交易统计 -->
+        <div class="card">
+            <h2>交易统计</h2>
+            <div class="metric">
+                <span class="metric-label">今日交易</span>
+                <span class="metric-value">0 笔</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">累计交易</span>
+                <span class="metric-value">0 笔</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">日交易上限</span>
+                <span class="metric-value">2 笔</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 实盘账户数据（新） -->
+    <div class="card real-account-card">
+        <h2>💰 实盘账户数据 (富途实盘)</h2>
+        <div class="account-summary">
+            <div class="account-item">
+                <div class="label">总资产</div>
+                <div class="value">HKD 805306.59</div>
+            </div>
+            <div class="account-item">
+                <div class="label">市值</div>
+                <div class="value">HKD 719233.58</div>
+            </div>
+            <div class="account-item">
+                <div class="label">港股现金</div>
+                <div class="value negative">HKD 1125.77</div>
+            </div>
+            <div class="account-item">
+                <div class="label">美股现金</div>
+                <div class="value">USD 10846.68</div>
+            </div>
+        </div>
+
+        <h3 style="color: #8892b0; margin: 15px 0 10px; font-size: 14px;">实盘持仓</h3>
+        
+        <div class="position-row">
+            <span class="position-code">US.BTDR Bitdeer Technologies Group</span>
+            <span>7894股</span>
+            <span>17.53</span>
+            <span class="position-pl negative">
+                -38.6% (-53490)
+            </span>
+        </div>
+        
+        <div class="position-row">
+            <span class="position-code">HK.09611 龙旗科技</span>
+            <span>100股</span>
+            <span>31.00</span>
+            <span class="position-pl negative">
+                -23.6% (-732)
+            </span>
+        </div>
+        
+        <div class="position-row">
+            <span class="position-code">HK.02598 连连数字</span>
+            <span>8000股</span>
+            <span>17.00</span>
+            <span class="position-pl negative">
+                -64.6% (-87910)
+            </span>
+        </div>
+        
+        <div class="position-row">
+            <span class="position-code">HK.00600 爱芯元智</span>
+            <span>200股</span>
+            <span>28.20</span>
+            <span class="position-pl negative">
+                -31.2% (-1760)
+            </span>
+        </div>
+        
+
+        <div style="text-align: right; margin-top: 10px; font-size: 12px; color: #8892b0;">
+            更新时间: 2026-04-13 14:47:53
+        </div>
+    </div>
+
+    <!-- 信号状态 -->
+    <div class="card">
+        <h2>实时信号状态 (需2个确认才交易)</h2>
+        <div class="signal-grid">
+            <div class="signal-box inactive">
+                <div class="signal-name">V3涡轮</div>
+                <div class="signal-status">未触发</div>
+            </div>
+            <div class="signal-box inactive">
+                <div class="signal-name">均值回归</div>
+                <div class="signal-status">未触发</div>
+            </div>
+            <div class="signal-box inactive">
+                <div class="signal-name">ML预测</div>
+                <div class="signal-status">未触发</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 系统资源 -->
+    <div class="card">
+        <h2>系统资源</h2>
+        <div class="metric">
+            <span class="metric-label">CPU</span>
+            <span class="metric-value">0.0%</span>
+        </div>
+        <div class="metric">
+            <span class="metric-label">内存</span>
+            <span class="metric-value negative">93.7%</span>
+        </div>
+        <div class="metric">
+            <span class="metric-label">磁盘</span>
+            <span class="metric-value">73.1%</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>连连数字V4双重确认策略监控面板 | 端口: 8081</p>
+        <p>实盘账户: 281756477947279377 | 数据仅供参考</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,259 @@
+{
+  "strategy_name": "BTDR PrevClose V2.1",
+  "symbol": "MSTR",
+  "start_date": "2026-04-21T22:50:26.872004",
+  "end_date": "2026-04-21T22:50:27.001023",
+  "phase": "小仓位试运行",
+  "metrics": {
+    "total_signals": 25,
+    "buy_signals": 15,
+    "sell_signals": 6,
+    "hold_signals": 4,
+    "total_trades": 5,
+    "filled_trades": 5,
+    "cancelled_trades": 0,
+    "total_return": 310.1283722597507,
+    "avg_return": 62.02567445195014,
+    "win_rate": 100.0,
+    "profit_factor": 0,
+    "max_drawdown": 0.0,
+    "max_consecutive_loss": 0,
+    "avg_holding_period": 0,
+    "signal_accuracy": 0,
+    "false_signal_rate": 0,
+    "missed_signal_rate": 0
+  },
+  "signals": [
+    {
+      "timestamp": "2026-03-27T22:50:26.872004",
+      "signal": "BUY",
+      "confidence": 0.8852142919229748,
+      "price": 151.94,
+      "reason": "模拟信号 #1"
+    },
+    {
+      "timestamp": "2026-03-28T22:50:26.881638",
+      "signal": "BUY",
+      "confidence": 0.6467983561008608,
+      "price": 156.57,
+      "reason": "模拟信号 #2"
+    },
+    {
+      "timestamp": "2026-03-29T22:50:26.885009",
+      "signal": "BUY",
+      "confidence": 0.8598528437324805,
+      "price": 161.52,
+      "reason": "模拟信号 #3"
+    },
+    {
+      "timestamp": "2026-03-30T22:50:26.886593",
+      "signal": "BUY",
+      "confidence": 0.8909729556485982,
+      "price": 164.0,
+      "reason": "模拟信号 #4"
+    },
+    {
+      "timestamp": "2026-03-31T22:50:26.889981",
+      "signal": "HOLD",
+      "confidence": 0.5637017332034828,
+      "price": 162.48,
+      "reason": "模拟信号 #5"
+    },
+    {
+      "timestamp": "2026-04-01T22:50:26.893003",
+      "signal": "BUY",
+      "confidence": 0.7574269294896714,
+      "price": 160.96,
+      "reason": "模拟信号 #6"
+    },
+    {
+      "timestamp": "2026-04-02T22:50:26.894681",
+      "signal": "SELL",
+      "confidence": 0.6873687420594126,
+      "price": 157.7,
+      "reason": "模拟信号 #7"
+    },
+    {
+      "timestamp": "2026-04-03T22:50:26.897342",
+      "signal": "BUY",
+      "confidence": 0.7099085529881075,
+      "price": 158.69,
+      "reason": "模拟信号 #8"
+    },
+    {
+      "timestamp": "2026-04-04T22:50:26.899415",
+      "signal": "SELL",
+      "confidence": 0.835552788417904,
+      "price": 158.91,
+      "reason": "模拟信号 #9"
+    },
+    {
+      "timestamp": "2026-04-05T22:50:26.901486",
+      "signal": "SELL",
+      "confidence": 0.6139351238159994,
+      "price": 154.38,
+      "reason": "模拟信号 #10"
+    },
+    {
+      "timestamp": "2026-04-06T22:50:26.904990",
+      "signal": "SELL",
+      "confidence": 0.6511572371061874,
+      "price": 152.52,
+      "reason": "模拟信号 #11"
+    },
+    {
+      "timestamp": "2026-04-07T22:50:26.908203",
+      "signal": "SELL",
+      "confidence": 0.7320457481218804,
+      "price": 151.63,
+      "reason": "模拟信号 #12"
+    },
+    {
+      "timestamp": "2026-04-08T22:50:26.909341",
+      "signal": "BUY",
+      "confidence": 0.748553073033381,
+      "price": 154.13,
+      "reason": "模拟信号 #13"
+    },
+    {
+      "timestamp": "2026-04-09T22:50:26.912000",
+      "signal": "BUY",
+      "confidence": 0.7560204063533432,
+      "price": 150.37,
+      "reason": "模拟信号 #14"
+    },
+    {
+      "timestamp": "2026-04-10T22:50:26.943001",
+      "signal": "SELL",
+      "confidence": 0.6554563366576581,
+      "price": 152.59,
+      "reason": "模拟信号 #15"
+    },
+    {
+      "timestamp": "2026-04-11T22:50:26.945992",
+      "signal": "BUY",
+      "confidence": 0.6587948587257435,
+      "price": 153.11,
+      "reason": "模拟信号 #16"
+    },
+    {
+      "timestamp": "2026-04-12T22:50:26.948089",
+      "signal": "BUY",
+      "confidence": 0.6975990992289793,
+      "price": 148.58,
+      "reason": "模拟信号 #17"
+    },
+    {
+      "timestamp": "2026-04-13T22:50:26.951002",
+      "signal": "HOLD",
+      "confidence": 0.6070259980080768,
+      "price": 146.44,
+      "reason": "模拟信号 #18"
+    },
+    {
+      "timestamp": "2026-04-14T22:50:26.951002",
+      "signal": "BUY",
+      "confidence": 0.7628088249474745,
+      "price": 147.39,
+      "reason": "模拟信号 #19"
+    },
+    {
+      "timestamp": "2026-04-15T22:50:26.957015",
+      "signal": "BUY",
+      "confidence": 0.8960660809801552,
+      "price": 146.26,
+      "reason": "模拟信号 #20"
+    },
+    {
+      "timestamp": "2026-04-16T22:50:26.960836",
+      "signal": "HOLD",
+      "confidence": 0.5596147044602517,
+      "price": 149.27,
+      "reason": "模拟信号 #21"
+    },
+    {
+      "timestamp": "2026-04-17T22:50:26.961883",
+      "signal": "HOLD",
+      "confidence": 0.522213395520227,
+      "price": 152.05,
+      "reason": "模拟信号 #22"
+    },
+    {
+      "timestamp": "2026-04-18T22:50:26.966023",
+      "signal": "BUY",
+      "confidence": 0.6347607178575388,
+      "price": 153.06,
+      "reason": "模拟信号 #23"
+    },
+    {
+      "timestamp": "2026-04-19T22:50:26.966023",
+      "signal": "BUY",
+      "confidence": 0.6190675050858071,
+      "price": 156.05,
+      "reason": "模拟信号 #24"
+    },
+    {
+      "timestamp": "2026-04-20T22:50:26.972004",
+      "signal": "BUY",
+      "confidence": 0.6975549966080241,
+      "price": 158.58,
+      "reason": "模拟信号 #25"
+    }
+  ],
+  "trades": [
+    {
+      "timestamp": "2026-03-27T23:50:26.872004",
+      "signal_timestamp": "2026-03-27T22:50:26.872004",
+      "action": "BUY",
+      "price": 152.09,
+      "volume": 100,
+      "pnl": 90.68720085712468,
+      "status": "FILLED"
+    },
+    {
+      "timestamp": "2026-03-28T23:50:26.881638",
+      "signal_timestamp": "2026-03-28T22:50:26.881638",
+      "action": "BUY",
+      "price": 156.73,
+      "volume": 100,
+      "pnl": 47.83969635258998,
+      "status": "FILLED"
+    },
+    {
+      "timestamp": "2026-03-29T23:50:26.885009",
+      "signal_timestamp": "2026-03-29T22:50:26.885009",
+      "action": "BUY",
+      "price": 161.68,
+      "volume": 100,
+      "pnl": 80.10598693676073,
+      "status": "FILLED"
+    },
+    {
+      "timestamp": "2026-03-30T23:50:26.886593",
+      "signal_timestamp": "2026-03-30T22:50:26.886593",
+      "action": "BUY",
+      "price": 164.16,
+      "volume": 100,
+      "pnl": 60.84908075142903,
+      "status": "FILLED"
+    },
+    {
+      "timestamp": "2026-04-01T23:50:26.893003",
+      "signal_timestamp": "2026-04-01T22:50:26.893003",
+      "action": "BUY",
+      "price": 161.12,
+      "volume": 100,
+      "pnl": 30.646407361846272,
+      "status": "FILLED"
+    }
+  ],
+  "result": "有条件通过",
+  "result_reason": "部分指标达标 (2/3)，需改进后重新验证",
+  "risk_level": "低风险",
+  "recommendations": [
+    "改进预测模型，提高准确率"
+  ],
+  "approved_by": "总控官",
+  "approved_at": "2026-04-21T22:50:27.005996",
+  "approval_notes": "影子模式验证通过，批准小仓位试运行"
+}

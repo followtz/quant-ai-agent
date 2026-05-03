@@ -1,0 +1,19 @@
+{
+  "date": "2026-04-11",
+  "turbo_A": {
+    "active": true,
+    "entry_price": 10.86,
+    "pending_qty": 1000,
+    "days_held": 0
+  },
+  "turbo_B": {
+    "active": false,
+    "entry_price": 0,
+    "pending_qty": 0,
+    "days_held": 0
+  },
+  "pnl": 0,
+  "trades": 0,
+  "last_close": 10.33,
+  "shares": 7894
+}

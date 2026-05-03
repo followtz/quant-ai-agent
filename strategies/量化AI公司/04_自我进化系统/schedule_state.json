@@ -1,0 +1,43 @@
+{
+  "last_run": {
+    "boundary_check": {
+      "time": "2026-04-21T21:44:12.299672",
+      "duration_sec": 0.184649,
+      "success": true
+    },
+    "token_monitor": {
+      "time": "2026-04-21T21:44:12.504267",
+      "duration_sec": 0.001411,
+      "success": true
+    },
+    "health_monitor": {
+      "time": "2026-04-21T21:44:12.517508",
+      "duration_sec": 0.377162,
+      "success": true
+    },
+    "portfolio_check": {
+      "time": "2026-04-21T21:44:12.910668",
+      "duration_sec": 2.314842,
+      "success": true
+    },
+    "stock_pool": {
+      "time": "2026-04-21T21:44:15.235127",
+      "duration_sec": 0.372218,
+      "success": true
+    },
+    "daily_report": {
+      "time": "2026-04-21T21:44:15.617914",
+      "duration_sec": 0.001016,
+      "success": true
+    }
+  },
+  "run_count": {
+    "boundary_check": 2,
+    "token_monitor": 2,
+    "health_monitor": 2,
+    "portfolio_check": 2,
+    "stock_pool": 2,
+    "daily_report": 2
+  },
+  "errors": []
+}

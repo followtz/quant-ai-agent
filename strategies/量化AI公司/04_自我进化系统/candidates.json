@@ -1,0 +1,128 @@
+[
+  {
+    "code": "CLSK",
+    "grade": "D",
+    "total_score": 20.5,
+    "scores": {
+      "liquidity": 17.5,
+      "volatility": 22.2,
+      "strategy_fit": 28.5,
+      "fundamentals": 10,
+      "risk_control": 10
+    },
+    "data": {
+      "price": 12.5,
+      "volume": 5000000,
+      "market_cap": 1800000000,
+      "volatility": 0.65,
+      "btc_corr": 0.72
+    },
+    "last_check": "2026-04-21T21:44:15.572204",
+    "status": "observe"
+  },
+  {
+    "code": "MARA",
+    "grade": "D",
+    "total_score": 21.0,
+    "scores": {
+      "liquidity": 22.0,
+      "volatility": 20.5,
+      "strategy_fit": 27.8,
+      "fundamentals": 10,
+      "risk_control": 10
+    },
+    "data": {
+      "price": 18.2,
+      "volume": 8000000,
+      "market_cap": 3500000000,
+      "volatility": 0.58,
+      "btc_corr": 0.68
+    },
+    "last_check": "2026-04-21T21:44:15.572204",
+    "status": "observe"
+  },
+  {
+    "code": "RIOT",
+    "grade": "D",
+    "total_score": 20.6,
+    "scores": {
+      "liquidity": 19.0,
+      "volatility": 21.6,
+      "strategy_fit": 28.1,
+      "fundamentals": 10,
+      "risk_control": 10
+    },
+    "data": {
+      "price": 10.8,
+      "volume": 6000000,
+      "market_cap": 2200000000,
+      "volatility": 0.62,
+      "btc_corr": 0.7
+    },
+    "last_check": "2026-04-21T21:44:15.572204",
+    "status": "observe"
+  },
+  {
+    "code": "HUT",
+    "grade": "D",
+    "total_score": 18.8,
+    "scores": {
+      "liquidity": 15.2,
+      "volatility": 19.5,
+      "strategy_fit": 27.2,
+      "fundamentals": 10,
+      "risk_control": 10
+    },
+    "data": {
+      "price": 15.3,
+      "volume": 3500000,
+      "market_cap": 1500000000,
+      "volatility": 0.55,
+      "btc_corr": 0.65
+    },
+    "last_check": "2026-04-21T21:44:15.572204",
+    "status": "observe"
+  },
+  {
+    "code": "CIFR",
+    "grade": "D",
+    "total_score": 18.9,
+    "scores": {
+      "liquidity": 13.8,
+      "volatility": 23.1,
+      "strategy_fit": 26.2,
+      "fundamentals": 8,
+      "risk_control": 10
+    },
+    "data": {
+      "price": 4.2,
+      "volume": 2500000,
+      "market_cap": 800000000,
+      "volatility": 0.7,
+      "btc_corr": 0.6
+    },
+    "last_check": "2026-04-21T21:44:15.572204",
+    "status": "observe"
+  },
+  {
+    "code": "CAN",
+    "grade": "D",
+    "total_score": 15.9,
+    "scores": {
+      "liquidity": 13.0,
+      "volatility": 18.4,
+      "strategy_fit": 20.3,
+      "fundamentals": 10,
+      "risk_control": 10
+    },
+    "data": {
+      "price": 6.5,
+      "volume": 2000000,
+      "market_cap": 1200000000,
+      "volatility": 0.52,
+      "btc_corr": 0.55
+    },
+    "last_check": "2026-04-21T21:44:15.573235",
+    "status": "observe"
+  }
+]

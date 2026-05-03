@@ -1,0 +1,570 @@
+# -*- coding: utf-8 -*-
+"""
+连连数字V4双重确认策略 - 实盘交易引擎
+整合V3涡轮 + ML信号过滤 + 均值回归三重机制
+实盘配置版本
+"""
+import json
+import time
+import logging
+import numpy as np
+import pandas as pd
+from datetime import datetime, timedelta
+from pathlib import Path
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
+
+# 富途API导入
+try:
+    from futu import *
+    FUTU_AVAILABLE = True
+except ImportError:
+    FUTU_AVAILABLE = False
+    print("[警告] 富途API未安装，使用模拟模式")
+
+
+class LianlianV4LiveEngine:
+    """
+    连连数字V4双重确认策略实盘引擎
+    
+    策略逻辑:
+    1. V3信号: 价格偏离20日均线5%
+    2. ML信号: 机器学习预测趋势方向
+    3. 均值回归: Z-Score > |2.0|
+    4. 双重确认: 任意两个信号为真时执行交易
+    """
+    
+    def __init__(self, config_path="config/v4_live_config.json"):
+        """初始化实盘引擎"""
+        self.config = self._load_config(config_path)
+        # 兼容新旧配置格式 (新格式用嵌套字典，旧格式用扁平key)
+        acc_cfg = self.config.get('account', {})
+        self.acc_id = self.config.get('account_id') or acc_cfg.get('account_id') or 281756477947279377
+        self.stock_code = self.config.get('stock_code', 'HK.02598')
+        pos_cfg = self.config.get('position', {})
+        self.base_position = pos_cfg.get('base_position', self.config.get('base_position', 8000))
+        self.min_position = pos_cfg.get('min_position', self.config.get('min_position', 6000))
+        self.max_position = pos_cfg.get('max_position', self.config.get('max_position', 10000))
+        self.trade_qty = pos_cfg.get('trade_qty', self.config.get('trade_qty', 1000))
+        # V3参数
+        v3_cfg = self.config.get('v3_params', {})
+        self.v3_threshold = v3_cfg.get('threshold', self.config.get('v3_threshold', 0.05))
+        self.ma_lookback = v3_cfg.get('ma_lookback', self.config.get('ma_lookback', 20))
+        # 均值回归参数
+        mr_cfg = self.config.get('mean_reversion_params', {})
+        self.mr_lookback = mr_cfg.get('lookback', self.config.get('mr_lookback', 20))
+        self.mr_threshold = mr_cfg.get('threshold', self.config.get('mr_threshold', 2.0))
+        # ML参数
+        ml_cfg = self.config.get('ml_params', {})
+        self.ml_confidence = ml_cfg.get('confidence', self.config.get('ml_confidence', 0.5))
+        
+        # 确认数量 (2=双重确认, 3=三重确认)
+        self.confirmation_count = self.config.get('confirmation_count', 2)
+        
+        # 状态
+        self.current_position = self.base_position
+        self.cash = self.config.get('initial_cash', 100000)
+        self.trade_history = []
+        self.daily_trades = 0
+        self.last_trade_date = None
+        self.consecutive_failures = 0
+        
+        # ML模型
+        self.ml_model = None
+        self.scaler = StandardScaler()
+        self.model_trained = False
+        
+        # 富途API
+        self.quote_ctx = None
+        self.trade_ctx = None
+        self.acc_id = self.config.get('account_id', 281756477947279377)
+        
+        # 设置日志
+        self._setup_logging()
+        
+        self.logger.info("="*70)
+        self.logger.info("连连数字V4双重确认策略 - 实盘引擎初始化")
+        self.logger.info("="*70)
+        self.logger.info(f"股票代码: {self.stock_code}")
+        self.logger.info(f"底仓: {self.base_position}股")
+        self.logger.info(f"持仓范围: {self.min_position}-{self.max_position}股")
+        self.logger.info(f"V3阈值: {self.v3_threshold*100}%")
+        self.logger.info(f"均值回归Z-Score: ±{self.mr_threshold}")
+        self.logger.info(f"确认数量: {self.confirmation_count}")
+        
+    def _load_config(self, path):
+        """加载配置"""
+        try:
+            with open(path, 'r') as f:
+                return json.load(f)
+        except:
+            return self._default_config()
+    
+    def _default_config(self):
+        """默认配置"""
+        return {
+            'stock_code': 'HK.02598',
+            'base_position': 8000,
+            'min_position': 6000,
+            'max_position': 10000,
+            'trade_qty': 1000,
+            'v3_threshold': 0.05,
+            'ma_lookback': 20,
+            'mr_lookback': 20,
+            'mr_threshold': 2.0,
+            'ml_confidence': 0.5,
+            'confirmation_count': 2,
+            'initial_cash': 100000,
+            'account_id': 281756477947279377,
+            'max_daily_trades': 2,
+            'stop_loss': 0.15
+        }
+    
+    def _setup_logging(self):
+        """设置日志"""
+        log_dir = Path('logs')
+        log_dir.mkdir(exist_ok=True)
+        
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        log_file = log_dir / f'v4_live_{timestamp}.log'
+        
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(log_file, encoding='utf-8'),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger('V4_Live')
+        
+    def connect_futu(self):
+        """连接富途API"""
+        if not FUTU_AVAILABLE:
+            self.logger.info("[模拟模式] 跳过富途API连接")
+            return True
+        
+        try:
+            self.logger.info("[连接] 正在连接富途OpenD...")
+            self.quote_ctx = OpenQuoteContext(host='127.0.0.1', port=11111)
+            self.trade_ctx = OpenSecTradeContext(host='127.0.0.1', port=11111)
+            self.logger.info("[连接] 富途API连接成功")
+            return True
+        except Exception as e:
+            self.logger.error(f"[连接失败] {e}")
+            return False
+    
+    def disconnect_futu(self):
+        """断开富途API"""
+        if self.quote_ctx:
+            self.quote_ctx.close()
+        if self.trade_ctx:
+            self.trade_ctx.close()
+        self.logger.info("[断开] 富途API已断开")
+    
+    def get_market_data(self, days=60):
+        """获取市场数据"""
+        if not FUTU_AVAILABLE:
+            # 模拟模式：从文件读取
+            try:
+                df = pd.read_csv('data/02598_daily.csv')
+                df['date'] = pd.to_datetime(df['date'])
+                return df.sort_values('date').tail(days)
+            except:
+                self.logger.error("[错误] 无法加载数据文件")
+                return None
+
+        # 实盘模式：从富途获取
+        # Futu OpenD v10.x 返回 3 值: (ret_code, ret_msg, DataFrame)
+        try:
+            start_str = (datetime.now() - timedelta(days=days + 30)).strftime('%Y-%m-%d')
+            end_str = datetime.now().strftime('%Y-%m-%d')
+            ret_code, ret_msg, data = self.quote_ctx.request_history_kline(
+                self.stock_code,
+                start=start_str,
+                end=end_str,
+                ktype=KLType.K_DAY,
+                autype=AuType.QFQ
+            )
+            if ret_code == RET_OK and data is not None and not data.empty:
+                self.logger.info(f"[数据] 富途获取 {len(data)} 条K线成功")
+                return data
+            else:
+                self.logger.error(f"[错误] 获取数据失败({ret_code}): {ret_msg}，回退到CSV文件")
+                return self._load_csv_fallback()
+        except Exception as e:
+            self.logger.error(f"[错误] 获取数据异常: {e}，回退到CSV文件")
+            return self._load_csv_fallback()
+
+    def _load_csv_fallback(self):
+        """从本地CSV加载数据作为回退数据源"""
+        try:
+            df = pd.read_csv('data/02598_daily.csv')
+            df['date'] = pd.to_datetime(df['date'])
+            df = df.sort_values('date')
+            latest_date = df['date'].iloc[-1]
+            self.logger.warning(f"[回退] 使用本地CSV数据，最后日期: {latest_date.date()} (可能非今日)")
+            return df.tail(60)
+        except:
+            self.logger.error("[错误] 回退数据也无法加载")
+            return None
+    
+    def calculate_indicators(self, df):
+        """计算技术指标"""
+        # 基础指标
+        df['returns'] = df['close'].pct_change()
+        df['ma_20'] = df['close'].rolling(self.ma_lookback).mean()
+        df['std_20'] = df['close'].rolling(self.ma_lookback).std()
+        
+        # 均值回归Z-Score
+        df['zscore'] = (df['close'] - df['ma_20']) / df['std_20']
+        
+        # RSI
+        delta = df['close'].diff()
+        gain = delta.where(delta > 0, 0).rolling(14).mean()
+        loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
+        df['rsi'] = 100 - (100 / (1 + gain / loss))
+        
+        # MACD
+        ema12 = df['close'].ewm(span=12).mean()
+        ema26 = df['close'].ewm(span=26).mean()
+        df['macd'] = ema12 - ema26
+        df['macd_signal'] = df['macd'].ewm(span=9).mean()
+        
+        # 布林带
+        df['bb_mid'] = df['ma_20']
+        df['bb_upper'] = df['ma_20'] + 2 * df['std_20']
+        df['bb_lower'] = df['ma_20'] - 2 * df['std_20']
+        df['bb_position'] = (df['close'] - df['bb_lower']) / (df['bb_upper'] - df['bb_lower'])
+        
+        return df
+    
+    def train_ml_model(self, df):
+        """训练ML模型"""
+        self.logger.info("[ML训练] 训练趋势预测模型...")
+        
+        try:
+            # 目标变量: 未来3天涨跌
+            future_return = df['close'].shift(-3) / df['close'] - 1
+            df['target'] = 0
+            df.loc[future_return > 0.02, 'target'] = 1
+            df.loc[future_return < -0.02, 'target'] = -1
+            
+            # 特征
+            feature_cols = [
+                'returns', 'rsi', 'macd', 'macd_signal',
+                'zscore', 'bb_position'
+            ]
+            
+            df_clean = df.dropna()
+            if len(df_clean) < 30:
+                self.logger.warning("[ML警告] 数据不足，跳过训练")
+                return False
+            
+            X = df_clean[feature_cols]
+            y = df_clean['target']
+            
+            # 标准化
+            X_scaled = self.scaler.fit_transform(X)
+            
+            # 训练
+            self.ml_model = RandomForestClassifier(
+                n_estimators=50,
+                max_depth=6,
+                min_samples_split=5,
+                random_state=42
+            )
+            self.ml_model.fit(X_scaled, y)
+            self.model_trained = True
+            
+            self.logger.info("[ML训练] 模型训练完成")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"[ML错误] 训练失败: {e}")
+            return False
+    
+    def generate_signals(self, df):
+        """生成交易信号"""
+        latest = df.iloc[-1]
+        
+        # V3信号
+        price_vs_ma = (latest['close'] - latest['ma_20']) / latest['ma_20']
+        v3_buy = price_vs_ma < -self.v3_threshold
+        v3_sell = price_vs_ma > self.v3_threshold
+        
+        # 均值回归信号
+        mr_buy = latest['zscore'] < -self.mr_threshold
+        mr_sell = latest['zscore'] > self.mr_threshold
+        
+        # ML信号
+        ml_buy = False
+        ml_sell = False
+        ml_up_prob = 0.5
+        ml_down_prob = 0.5
+        
+        if self.model_trained:
+            try:
+                feature_cols = ['returns', 'rsi', 'macd', 'macd_signal', 'zscore', 'bb_position']
+                X = df[feature_cols].iloc[-1:]
+                X_scaled = self.scaler.transform(X)
+                pred = self.ml_model.predict(X_scaled)[0]
+                proba = self.ml_model.predict_proba(X_scaled)[0]
+                
+                classes = list(self.ml_model.classes_)
+                if 1 in classes:
+                    ml_up_prob = proba[classes.index(1)]
+                if -1 in classes:
+                    ml_down_prob = proba[classes.index(-1)]
+                
+                ml_buy = ml_up_prob > self.ml_confidence
+                ml_sell = ml_down_prob > self.ml_confidence
+            except:
+                pass
+        
+        # 统计确认信号数量
+        buy_signals = sum([v3_buy, mr_buy, ml_buy])
+        sell_signals = sum([v3_sell, mr_sell, ml_sell])
+        
+        # 双重确认
+        final_buy = buy_signals >= self.confirmation_count
+        final_sell = sell_signals >= self.confirmation_count
+        
+        return {
+            'v3_buy': v3_buy, 'v3_sell': v3_sell,
+            'mr_buy': mr_buy, 'mr_sell': mr_sell,
+            'ml_buy': ml_buy, 'ml_sell': ml_sell,
+            'ml_up_prob': ml_up_prob, 'ml_down_prob': ml_down_prob,
+            'buy_signals': buy_signals, 'sell_signals': sell_signals,
+            'final_buy': final_buy, 'final_sell': final_sell,
+            'price': latest['close'],
+            'zscore': latest['zscore'],
+            'rsi': latest['rsi']
+        }
+    
+    def check_risk_limits(self, signal):
+        """检查风险限制"""
+        today = datetime.now().date()
+        
+        # 重置日交易计数
+        if self.last_trade_date != today:
+            self.daily_trades = 0
+            self.last_trade_date = today
+        
+        # 检查日交易限制
+        if self.daily_trades >= self.config.get('max_daily_trades', 2):
+            return False, "日交易次数已达上限"
+        
+        # 检查持仓限制
+        if signal['final_buy'] and self.current_position >= self.max_position:
+            return False, "持仓已达上限"
+        if signal['final_sell'] and self.current_position <= self.min_position:
+            return False, "持仓已达下限"
+        
+        return True, "通过"
+    
+    def execute_trade(self, signal):
+        """执行交易"""
+        if not FUTU_AVAILABLE:
+            # 模拟交易
+            self.logger.info("[模拟交易] 仅记录，不执行真实交易")
+            return self._simulate_trade(signal)
+        
+        # 实盘交易
+        try:
+            if signal['final_buy']:
+                # 买入
+                qty = min(self.trade_qty, int(self.cash / signal['price'] / 100) * 100)
+                if qty >= 100:
+                    ret_code, ret_msg, _ = self.trade_ctx.place_order(
+                        price=signal['price'],
+                        qty=qty,
+                        code=self.stock_code,
+                        trd_side=TrdSide.BUY,
+                        order_type=OrderType.NORMAL,
+                        trd_env=TrdEnv.REAL,
+                        acc_id=self.acc_id
+                    )
+                    if ret_code == RET_OK:
+                        self.logger.info(f"[买入成功] {qty}股 @ {signal['price']}")
+                        self.current_position += qty
+                        self.cash -= qty * signal['price']
+                        self.daily_trades += 1
+                        return True
+                    else:
+                        self.logger.error(f"[买入失败]({ret_code}): {ret_msg}")
+                        return False
+
+            elif signal['final_sell']:
+                # 卖出
+                qty = min(self.trade_qty, self.current_position - self.min_position)
+                if qty >= 100:
+                    ret_code, ret_msg, _ = self.trade_ctx.place_order(
+                        price=signal['price'],
+                        qty=qty,
+                        code=self.stock_code,
+                        trd_side=TrdSide.SELL,
+                        order_type=OrderType.NORMAL,
+                        trd_env=TrdEnv.REAL,
+                        acc_id=self.acc_id
+                    )
+                    if ret_code == RET_OK:
+                        self.logger.info(f"[卖出成功] {qty}股 @ {signal['price']}")
+                        self.current_position -= qty
+                        self.cash += qty * signal['price']
+                        self.daily_trades += 1
+                        return True
+                    else:
+                        self.logger.error(f"[卖出失败]({ret_code}): {ret_msg}")
+                        return False
+        
+        except Exception as e:
+            self.logger.error(f"[交易异常] {e}")
+            return False
+    
+    def _simulate_trade(self, signal):
+        """模拟交易"""
+        if signal['final_buy']:
+            qty = min(self.trade_qty, int(self.cash / signal['price'] / 100) * 100)
+            if qty >= 100:
+                self.logger.info(f"[模拟买入] {qty}股 @ {signal['price']:.2f}")
+                self.current_position += qty
+                self.cash -= qty * signal['price']
+                self.daily_trades += 1
+                return True
+        
+        elif signal['final_sell']:
+            qty = min(self.trade_qty, self.current_position - self.min_position)
+            if qty >= 100:
+                self.logger.info(f"[模拟卖出] {qty}股 @ {signal['price']:.2f}")
+                self.current_position -= qty
+                self.cash += qty * signal['price']
+                self.daily_trades += 1
+                return True
+        
+        return False
+    
+    def run_once(self):
+        """运行一次交易循环"""
+        self.logger.info("\n" + "="*70)
+        self.logger.info(f"交易循环 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+        # ====== 市场时间检测 ======
+        import datetime as dt2
+        now = dt2.datetime.now()
+        hk_hour = now.hour
+        is_hk_market = (9 <= hk_hour < 12) or (13 <= hk_hour < 16)
+        is_hk_pre = (9 <= hk_hour < 9)  # 永远 False
+        if not is_hk_market and not is_hk_pre:
+            self.logger.info(f"[市场] 港股休市中({hk_hour:02d}:{now.minute:02d})，跳过")
+            return True
+        
+        # ====== 持仓同步（复用主连接，避免连接泄漏）======
+        try:
+            # 优先复用主连接 self.quote_ctx（已在 connect_futu() 中创建）
+            qctx = self.quote_ctx
+            if qctx is None:
+                # 仅在主连接不可用时临时创建，用 try/finally 确保 close
+                from futu import OpenQuoteContext, RET_OK
+                qctx = OpenQuoteContext(host='127.0.0.1', port=11111)
+                temp_ctx = True
+            else:
+                temp_ctx = False
+            try:
+                ret, df = qctx.get_position_list(acc_id=self.acc_id)
+                if ret == RET_OK and df is not None:
+                    ll = df[df.get('code','').str.contains('02598', na=False)]
+                    if not ll.empty:
+                        actual = int(ll.iloc[0].get('qty', self.current_position))
+                        if actual != self.current_position:
+                            self.logger.info(f"[持仓] 同步 {self.current_position}->{actual}")
+                            self.current_position = actual
+            finally:
+                if temp_ctx:
+                    qctx.close()  # 只关闭临时创建的连接
+        except Exception as e:
+            self.logger.warning(f"[持仓同步] 异常: {e}，使用内存值")
+
+        self.logger.info("="*70)
+        
+        # 获取数据
+        df = self.get_market_data(days=60)
+        if df is None or len(df) < 30:
+            self.logger.error("[错误] 数据不足")
+            return False
+        
+        # 计算指标
+        df = self.calculate_indicators(df)
+        
+        # 训练ML模型（每天一次）
+        if not self.model_trained:
+            self.train_ml_model(df)
+        
+        # 生成信号
+        signal = self.generate_signals(df)
+        
+        # 打印信号状态
+        self.logger.info(f"当前价格: {signal['price']:.2f}")
+        self.logger.info(f"Z-Score: {signal['zscore']:.2f}")
+        self.logger.info(f"RSI: {signal['rsi']:.2f}")
+        self.logger.info(f"V3买入: {signal['v3_buy']}, V3卖出: {signal['v3_sell']}")
+        self.logger.info(f"MR买入: {signal['mr_buy']}, MR卖出: {signal['mr_sell']}")
+        self.logger.info(f"ML买入: {signal['ml_buy']}({signal['ml_up_prob']:.2f}), ML卖出: {signal['ml_sell']}({signal['ml_down_prob']:.2f})")
+        self.logger.info(f"买入信号数: {signal['buy_signals']}, 卖出信号数: {signal['sell_signals']}")
+        self.logger.info(f"最终买入: {signal['final_buy']}, 最终卖出: {signal['final_sell']}")
+        self.logger.info(f"当前持仓: {self.current_position}股, 现金: ${self.cash:,.2f}")
+        
+        # 检查风险限制
+        if signal['final_buy'] or signal['final_sell']:
+            risk_ok, risk_msg = self.check_risk_limits(signal)
+            if not risk_ok:
+                self.logger.info(f"[风险限制] {risk_msg}")
+                return False
+            
+            # 执行交易
+            self.execute_trade(signal)
+        else:
+            self.logger.info("[无交易] 未满足双重确认条件")
+        
+        return True
+    
+    def run(self, interval=60):
+        """持续运行"""
+        self.logger.info("\n" + "="*70)
+        self.logger.info("连连数字V4双重确认策略 - 实盘运行")
+        self.logger.info("="*70)
+        
+        # 连接API
+        if not self.connect_futu():
+            self.logger.error("[错误] 无法连接交易API")
+            return
+        
+        try:
+            while True:
+                self.run_once()
+                self.logger.info(f"[等待] {interval}秒后下次检查...")
+                time.sleep(interval)
+        except KeyboardInterrupt:
+            self.logger.info("\n[停止] 用户中断")
+        finally:
+            self.disconnect_futu()
+
+
+def main():
+    """主函数"""
+    import argparse
+    parser = argparse.ArgumentParser(description='连连数字V4双重确认策略')
+    parser.add_argument('--config', default='config/v4_live_config.json', help='配置文件路径')
+    parser.add_argument('--once', action='store_true', help='运行一次后退出')
+    args = parser.parse_args()
+    
+    engine = LianlianV4LiveEngine(config_path=args.config)
+    
+    if args.once:
+        engine.run_once()
+    else:
+        engine.run(interval=60)
+
+
+if __name__ == '__main__':
+    main()

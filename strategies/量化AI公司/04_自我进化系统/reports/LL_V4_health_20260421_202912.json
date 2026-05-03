@@ -1,0 +1,16 @@
+{
+  "strategy_id": "LL_V4",
+  "strategy_name": "连连数字V4双重确认",
+  "market": "港股",
+  "check_time": "2026-04-21T20:29:12.729898",
+  "period": "近14日",
+  "metrics": {
+    "win_rate": 0,
+    "max_drawdown": 0,
+    "total_return": 0,
+    "trade_count": 0
+  },
+  "level": "[RED] 红色预警",
+  "trigger": "win_rate_low",
+  "recommendation": "胜率持续低于45%，建议回测历史最优参数，对比当前参数差距"
+}

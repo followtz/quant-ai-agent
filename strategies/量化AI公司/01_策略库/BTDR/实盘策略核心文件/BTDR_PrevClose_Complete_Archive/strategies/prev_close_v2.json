@@ -1,0 +1,118 @@
+{
+  "name": "协同 PrevClose V2",
+  "version": "2.0.0",
+  "created_date": "2026-04-12",
+  "description": "涡轮A与涡轮B协同互补PrevClose策略V2优化版。核心改进：B_offset=+5%让B更早卖出，S12%过滤噪音，Ao=-1%微调买回。",
+  "changelog": {
+    "v1.0.0": "V1基准：S10%卖出，Ao0%买回，Bo0%卖出，净利$18,843",
+    "v2.0.0": "V2优化：S12%卖出，Ao-1%买回，Bo+5%卖出，净利$25,456 (+35.1%)"
+  },
+
+  "parameters": {
+    "sell_trigger": {
+      "type": "TurboA",
+      "condition": "price >= prev_close * (1 + sell_threshold)",
+      "sell_threshold_pct": 12,
+      "sell_threshold": 0.12,
+      "unit": "relative_to_prev_close",
+      "note": "V1为10%，V2提升至12%以过滤噪音、抓住大行情"
+    },
+    "buyback_trigger_A": {
+      "type": "TurboA_buyback",
+      "condition": "price <= prev_close_A_sell_day * (1 + A_offset)",
+      "offset_pct": -1,
+      "offset": -0.01,
+      "unit": "prev_close_minus_1pct",
+      "note": "V1为0%(精确前收)，V2微调至-1%以略微增加交易频率"
+    },
+    "buy_trigger": {
+      "type": "TurboB",
+      "condition": "price <= prev_close * (1 - buy_threshold)",
+      "buy_threshold_pct": 5,
+      "buy_threshold": 0.05,
+      "unit": "relative_to_prev_close"
+    },
+    "sellback_trigger_B": {
+      "type": "TurboB_sellback",
+      "condition": "price >= prev_close_B_buy_day * (1 + B_offset)",
+      "offset_pct": 5,
+      "offset": 0.05,
+      "unit": "prev_close_plus_5pct",
+      "note": "V1为0%(精确前收)，V2提升至+5%以更早触发卖出、捕获更多利润"
+    }
+  },
+
+  "position_limits": {
+    "min": 7000,
+    "max": 11000,
+    "initial": 8894,
+    "balance_lower": 7500,
+    "balance_upper": 10500,
+    "note": "V2默认范围；V3测试将扩展至5000-12000"
+  },
+
+  "trading_params": {
+    "shares_per_trade": 1000,
+    "commission_rate": 0.001,
+    "slippage_rate": 0.001,
+    "time_limit_A": null,
+    "time_limit_B": null,
+    "note": "V2默认1000股/笔；V3测试将提升至2000股/笔"
+  },
+
+  "backtest_results": {
+    "data_period": "2024-11-27 to 2026-04-10",
+    "n_days": 341,
+    "BH_return": -12.06,
+    "total_trades": 10,
+    "TurboA_trades": 6,
+    "TurboB_trades": 3,
+    "win_rate": 100,
+    "gross_PnL_usd": 25732,
+    "cost_usd": 276,
+    "net_PnL_usd": 25456,
+    "excess_return_pct": 11.99,
+    "PnL_breakdown": {
+      "TurboA": 12300,
+      "TurboB": 13400,
+      "A_contribution_pct": 47.4,
+      "B_contribution_pct": 52.6
+    },
+    "vs_V1_improvement": {
+      "net_PnL_delta": 6613,
+      "net_PnL_improvement_pct": 35.1,
+      "key_driver": "B_offset从0%提升至+5%，B单笔利润从$2,614提升至$4,467"
+    }
+  },
+
+  "key_findings": [
+    "B_offset=+5%是V2的核心利润引擎：让B更早、更容易地在高位卖出，单笔利润提升$1,853",
+    "S12%比S10%更优：更高的触发门槛过滤噪音，确保抓住的是大级别行情（20%+涨幅）",
+    "A_offset=-1%微调有效：对A买回影响不大，但配合S12%可略微增加交易频率",
+    "直觉S7%是陷阱：更宽松的卖出触发反而减少利润，因为抓住了太多'假行情'",
+    "V2净利$25,456 vs V1净利$18,843，提升35.1%，超额收益从+9.72%提升至+11.99%"
+  ],
+
+  "v3_test_params": {
+    "shares_per_trade": 2000,
+    "position_min": 5000,
+    "position_max": 12000,
+    "balance_lower": 6000,
+    "balance_upper": 11000,
+    "expected_impact": "交易笔数不变，单笔利润翻倍，总利润约$50,912，但需注意仓位管理和资金占用"
+  },
+
+  "live_trading_notes": [
+    "B_offset=+5%在Phase1暴涨期表现优异，但在Phase2/4的温和上涨期可能过早卖出",
+    "S12%触发频率较低（全年约6次A卖出），需耐心等待大行情",
+    "A_offset=-1%在急跌行情中可能更快买回，但需监控是否过早介入",
+    "建议实盘先用V1参数（更保守），验证3-6个月后再切换V2"
+  ],
+
+  "next_optimization_directions": [
+    "V3: 提升单笔交易量至2000股，扩展仓位范围至5000-12000",
+    "V4: 分阶段自适应参数（Phase1用激进，Phase2/4用保守）",
+    "V5: 添加时间限制（如30天未触发PrevClose则市价平仓）",
+    "V6: 测试A_offset=-2% vs -1%的边际效应"
+  ]
+}

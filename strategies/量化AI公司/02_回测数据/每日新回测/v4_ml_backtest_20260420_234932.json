@@ -1,0 +1,220 @@
+{
+  "backtest_date": "2026-04-20 23:49",
+  "stock": "HK.02598 (连连数字)",
+  "data_source": "Futu API",
+  "backtest_period": "2025-08-13 ~ 2026-04-20",
+  "parameters": {
+    "v3_threshold": 0.03,
+    "mr_threshold": 2.0,
+    "confirmation_count": 2,
+    "ml_confidence_orig": 0.5,
+    "ml_confidence_enhanced": 0.55
+  },
+  "results": {
+    "v4_original": {
+      "name": "V4 Original (RF)",
+      "total_return": "-6.31%",
+      "total_return_pct": -6.31275510204082,
+      "max_drawdown": "-12.29%",
+      "max_drawdown_pct": 12.288470238095242,
+      "total_trades": 15,
+      "round_trips": 0,
+      "win_rate": "0.0%",
+      "win_rate_pct": 0,
+      "final_equity": "$154,246.68",
+      "final_position": 7000,
+      "final_cash": "$111,056.68"
+    },
+    "v4_enhanced": {
+      "name": "V4 Enhanced (Ensemble)",
+      "total_return": "-6.12%",
+      "total_return_pct": -6.1162657920310854,
+      "max_drawdown": "-12.29%",
+      "max_drawdown_pct": 12.288470238095242,
+      "total_trades": 16,
+      "round_trips": 1,
+      "win_rate": "100.0%",
+      "win_rate_pct": 100.0,
+      "final_equity": "$154,570.18",
+      "final_position": 6000,
+      "final_cash": "$117,550.18"
+    },
+    "mean_reversion_only": {
+      "name": "MeanReversion Only",
+      "total_return": "-13.18%",
+      "total_return_pct": -13.182565025545747,
+      "max_drawdown": "-18.97%",
+      "max_drawdown_pct": 18.967236060329068,
+      "total_trades": 8,
+      "round_trips": 0,
+      "win_rate": "0.0%",
+      "win_rate_pct": 0,
+      "final_equity": "$149,534.35",
+      "final_position": 10000,
+      "final_cash": "$87,834.35"
+    },
+    "buy_hold": {
+      "name": "Buy&Hold",
+      "total_return": "-17.26%",
+      "total_return_pct": -17.255075022065313,
+      "total_trades": 0,
+      "note": "基准策略"
+    }
+  },
+  "enhanced_feature_importance": {
+    "macd_signal": "0.0889",
+    "volatility_20d": "0.0837",
+    "macd": "0.0822",
+    "volatility_5d": "0.0808",
+    "volume_ratio": "0.0796",
+    "price_vs_ma20": "0.0790",
+    "rsi": "0.0752",
+    "vix_proxy": "0.0693",
+    "returns": "0.0680",
+    "momentum_10d": "0.0646"
+  },
+  "v4_original_trades": [
+    {
+      "date": "2026-01-06",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.26,
+      "commission": 7.26
+    },
+    {
+      "date": "2026-02-02",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 6.58,
+      "commission": 6.58
+    },
+    {
+      "date": "2026-02-03",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 6.56,
+      "commission": 6.5600000000000005
+    },
+    {
+      "date": "2026-02-04",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 6.47,
+      "commission": 6.47
+    },
+    {
+      "date": "2026-02-05",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 6.44,
+      "commission": 6.44
+    },
+    {
+      "date": "2026-02-11",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.15,
+      "commission": 7.15
+    },
+    {
+      "date": "2026-02-16",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.3,
+      "commission": 7.3
+    },
+    {
+      "date": "2026-02-20",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.54,
+      "commission": 7.54
+    },
+    {
+      "date": "2026-02-23",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.52,
+      "commission": 7.5200000000000005
+    },
+    {
+      "date": "2026-03-23",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 5.4,
+      "commission": 5.4
+    }
+  ],
+  "v4_enhanced_trades": [
+    {
+      "date": "2026-02-02",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 6.58,
+      "commission": 6.58
+    },
+    {
+      "date": "2026-02-03",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 6.56,
+      "commission": 6.5600000000000005
+    },
+    {
+      "date": "2026-02-04",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 6.47,
+      "commission": 6.47
+    },
+    {
+      "date": "2026-02-05",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 6.44,
+      "commission": 6.44
+    },
+    {
+      "date": "2026-02-20",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.54,
+      "commission": 7.54
+    },
+    {
+      "date": "2026-02-24",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.15,
+      "commission": 7.15
+    },
+    {
+      "date": "2026-02-26",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.34,
+      "commission": 7.34
+    },
+    {
+      "date": "2026-02-27",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 7.4,
+      "commission": 7.4
+    },
+    {
+      "date": "2026-03-23",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 5.4,
+      "commission": 5.4
+    },
+    {
+      "date": "2026-04-10",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 6.58,
+      "commission": 6.58
+    }
+  ]
+}

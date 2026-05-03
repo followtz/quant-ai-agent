@@ -1,0 +1,220 @@
+{
+  "backtest_date": "2026-04-20 23:48",
+  "stock": "HK.02598 (连连数字)",
+  "data_source": "Simulated",
+  "backtest_period": "2025-06-17 ~ 2026-04-20",
+  "parameters": {
+    "v3_threshold": 0.03,
+    "mr_threshold": 2.0,
+    "confirmation_count": 2,
+    "ml_confidence_orig": 0.5,
+    "ml_confidence_enhanced": 0.55
+  },
+  "results": {
+    "v4_original": {
+      "name": "V4 Original (RF)",
+      "total_return": "-8.98%",
+      "total_return_pct": -8.976878874202624,
+      "max_drawdown": "-19.08%",
+      "max_drawdown_pct": 19.082310771384684,
+      "total_trades": 18,
+      "round_trips": 0,
+      "win_rate": "0.0%",
+      "win_rate_pct": 0,
+      "final_equity": "$245,523.22",
+      "final_position": 6000,
+      "final_cash": "$141,400.75"
+    },
+    "v4_enhanced": {
+      "name": "V4 Enhanced (Ensemble)",
+      "total_return": "-5.39%",
+      "total_return_pct": -5.3870224352249405,
+      "max_drawdown": "-15.39%",
+      "max_drawdown_pct": 15.394918846381206,
+      "total_trades": 20,
+      "round_trips": 0,
+      "win_rate": "0.0%",
+      "win_rate_pct": 0,
+      "final_equity": "$255,206.40",
+      "final_position": 6000,
+      "final_cash": "$151,083.93"
+    },
+    "mean_reversion_only": {
+      "name": "MeanReversion Only",
+      "total_return": "-6.43%",
+      "total_return_pct": -6.434587636999785,
+      "max_drawdown": "-16.78%",
+      "max_drawdown_pct": 16.78249479296165,
+      "total_trades": 8,
+      "round_trips": 1,
+      "win_rate": "100.0%",
+      "win_rate_pct": 100.0,
+      "final_equity": "$246,582.93",
+      "final_position": 6000,
+      "final_cash": "$142,460.47"
+    },
+    "buy_hold": {
+      "name": "Buy&Hold",
+      "total_return": "-7.85%",
+      "total_return_pct": -7.851442942290808,
+      "total_trades": 0,
+      "note": "基准策略"
+    }
+  },
+  "enhanced_feature_importance": {
+    "rsi": "0.1017",
+    "volatility_20d": "0.0960",
+    "momentum_10d": "0.0830",
+    "vix_proxy": "0.0829",
+    "macd_signal": "0.0717",
+    "macd": "0.0712",
+    "zscore": "0.0709",
+    "price_vs_ma20": "0.0706",
+    "momentum_5d": "0.0651",
+    "volatility_5d": "0.0637"
+  },
+  "v4_original_trades": [
+    {
+      "date": "2025-12-15",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 17.951879121615555,
+      "commission": 17.951879121615555
+    },
+    {
+      "date": "2025-12-16",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 17.97638207377099,
+      "commission": 17.976382073770992
+    },
+    {
+      "date": "2025-12-23",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 17.955952274725338,
+      "commission": 17.955952274725338
+    },
+    {
+      "date": "2025-12-26",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 17.986953719958183,
+      "commission": 17.986953719958183
+    },
+    {
+      "date": "2026-01-12",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 19.495808658188764,
+      "commission": 19.495808658188764
+    },
+    {
+      "date": "2026-01-23",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 15.680139506933369,
+      "commission": 15.680139506933369
+    },
+    {
+      "date": "2026-03-13",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 16.90148134514321,
+      "commission": 16.90148134514321
+    },
+    {
+      "date": "2026-03-20",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 16.34585718800652,
+      "commission": 16.34585718800652
+    },
+    {
+      "date": "2026-03-27",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 17.62092432801783,
+      "commission": 17.62092432801783
+    },
+    {
+      "date": "2026-03-30",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 18.570049221602467,
+      "commission": 18.57004922160247
+    }
+  ],
+  "v4_enhanced_trades": [
+    {
+      "date": "2026-01-12",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 19.495808658188764,
+      "commission": 19.495808658188764
+    },
+    {
+      "date": "2026-01-14",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 19.60381740088719,
+      "commission": 19.60381740088719
+    },
+    {
+      "date": "2026-01-23",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 15.680139506933369,
+      "commission": 15.680139506933369
+    },
+    {
+      "date": "2026-01-26",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 15.452604281985577,
+      "commission": 15.452604281985577
+    },
+    {
+      "date": "2026-02-09",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 14.765980884343554,
+      "commission": 14.765980884343554
+    },
+    {
+      "date": "2026-02-10",
+      "action": "BUY",
+      "qty": 1000,
+      "price": 14.714274720129431,
+      "commission": 14.714274720129431
+    },
+    {
+      "date": "2026-03-13",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 16.90148134514321,
+      "commission": 16.90148134514321
+    },
+    {
+      "date": "2026-03-20",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 16.34585718800652,
+      "commission": 16.34585718800652
+    },
+    {
+      "date": "2026-03-27",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 17.62092432801783,
+      "commission": 17.62092432801783
+    },
+    {
+      "date": "2026-03-30",
+      "action": "SELL",
+      "qty": 1000,
+      "price": 18.570049221602467,
+      "commission": 18.57004922160247
+    }
+  ]
+}

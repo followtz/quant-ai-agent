@@ -1,0 +1,140 @@
+{
+  "name": "协同 PrevClose V3",
+  "version": "3.0.0",
+  "created_date": "2026-04-12",
+  "description": "涡轮A与涡轮B协同互补PrevClose策略V3最终版。核心改进：单笔交易量翻倍至2000股，仓位扩展至5000-12000，配合最优参数S12%/Ao-1%/Bo+5%。",
+  "changelog": {
+    "v1.0.0": "V1基准：S10%卖出，Ao0%买回，Bo0%卖出，1000股/笔，净利$18,843",
+    "v2.0.0": "V2优化：S12%卖出，Ao-1%买回，Bo+5%卖出，1000股/笔，净利$25,456 (+35.1%)",
+    "v3.0.0": "V3最终：S12%卖出，Ao-1%买回，Bo+5%卖出，2000股/笔，5000-12000仓位，净利$50,912 (+170%)"
+  },
+
+  "parameters": {
+    "sell_trigger": {
+      "type": "TurboA",
+      "condition": "price >= prev_close * (1 + sell_threshold)",
+      "sell_threshold_pct": 12,
+      "sell_threshold": 0.12,
+      "unit": "relative_to_prev_close"
+    },
+    "buyback_trigger_A": {
+      "type": "TurboA_buyback",
+      "condition": "price <= prev_close_A_sell_day * (1 + A_offset)",
+      "offset_pct": -1,
+      "offset": -0.01,
+      "unit": "prev_close_minus_1pct"
+    },
+    "buy_trigger": {
+      "type": "TurboB",
+      "condition": "price <= prev_close * (1 - buy_threshold)",
+      "buy_threshold_pct": 5,
+      "buy_threshold": 0.05,
+      "unit": "relative_to_prev_close"
+    },
+    "sellback_trigger_B": {
+      "type": "TurboB_sellback",
+      "condition": "price >= prev_close_B_buy_day * (1 + B_offset)",
+      "offset_pct": 5,
+      "offset": 0.05,
+      "unit": "prev_close_plus_5pct"
+    }
+  },
+
+  "position_limits": {
+    "min": 5000,
+    "max": 12000,
+    "initial": 8894,
+    "balance_lower": 6000,
+    "balance_upper": 11000,
+    "note": "V3扩展至5000-12000，协同边界6000-11000。扩展边界使协同机制几乎不触发 PrevClose独自完成所有平仓"
+  },
+
+  "trading_params": {
+    "shares_per_trade": 2000,
+    "commission_rate": 0.001,
+    "slippage_rate": 0.001,
+    "time_limit_A": null,
+    "time_limit_B": null,
+    "note": "V3从1000股提升至2000股。回测证明利润线性翻倍(2.0x)，胜率100%保持不变"
+  },
+
+  "backtest_results": {
+    "data_period": "2024-11-27 to 2026-04-10",
+    "n_days": 341,
+    "BH_return": -12.06,
+    "BH_Benchmark_usd": -120600,
+    "total_trades": 10,
+    "TurboA_trades": 6,
+    "TurboB_trades": 3,
+    "win_rate": 100,
+    "gross_PnL_usd": 51464,
+    "cost_usd": 552,
+    "net_PnL_usd": 50912,
+    "excess_return_pct": 16.35,
+    "PnL_breakdown": {
+      "TurboA": 29157,
+      "TurboB": 22308,
+      "A_contribution_pct": 56.6,
+      "B_contribution_pct": 43.4
+    },
+    "vs_V2_improvement": {
+      "net_PnL_delta": 25456,
+      "net_PnL_improvement_pct": 100.0,
+      "leverage_multiplier": "2.00x (交易笔数不变，单笔量翻倍)"
+    }
+  },
+
+  "v3_trade_details": {
+    "TurboA_6_trades": [
+      {"sell_day": 1, "sell_price": 14.27, "buyback_day": 58, "buyback_price": 9.26, "profit_per_share": 5.00, "total_profit": 10000},
+      {"sell_day": 61, "sell_price": 12.31, "buyback_day": 67, "buyback_price": 10.01, "profit_per_share": 2.30, "total_profit": 4600},
+      {"sell_day": 77, "sell_price": 11.65, "buyback_day": 81, "buyback_price": 9.14, "profit_per_share": 2.51, "total_profit": 5020},
+      {"sell_day": 89, "sell_price": 8.83, "buyback_day": 93, "buyback_price": 7.20, "profit_per_share": 1.63, "total_profit": 3260},
+      {"sell_day": 97, "sell_price": 9.38, "buyback_day": 316, "buyback_price": 7.28, "profit_per_share": 2.10, "total_profit": 4200},
+      {"sell_day": 323, "sell_price": 9.25, "buyback_day": 326, "buyback_price": 8.11, "profit_per_share": 1.14, "total_profit": 2280}
+    ],
+    "TurboB_3_trades": [
+      {"buy_day": 8, "buy_price": 18.90, "sellback_day": 12, "sellback_price": 23.14, "profit_per_share": 4.24, "total_profit": 8480},
+      {"buy_day": 13, "buy_price": 21.22, "sellback_day": 19, "sellback_price": 24.46, "profit_per_share": 3.24, "total_profit": 6480},
+      {"buy_day": 21, "buy_price": 22.29, "sellback_day": 24, "sellback_price": 26.10, "profit_per_share": 3.81, "total_profit": 7620}
+    ]
+  },
+
+  "shares_sensitivity": {
+    "note": "固定S12%_Ao-1%_Bo+5%，仓位5000-12000",
+    "data": [
+      {"shares": 500, "trades": 10, "net": 12728, "per_trade": 1273},
+      {"shares": 800, "trades": 10, "net": 20365, "per_trade": 2037},
+      {"shares": 1000, "trades": 10, "net": 25456, "per_trade": 2546},
+      {"shares": 1200, "trades": 10, "net": 30547, "per_trade": 3055},
+      {"shares": 1500, "trades": 10, "net": 38184, "per_trade": 3818},
+      {"shares": 2000, "trades": 10, "net": 50912, "per_trade": 5091}
+    ],
+    "conclusion": "利润与股数完美线性关系(2.0x)，胜率始终100%"
+  },
+
+  "position_range_comparison": {
+    "note": "固定2000股, S12%_Ao-1%_Bo+5%",
+    "data": [
+      {"range": "7000-11000 (V2旧边界)", "trades": 21, "net": 32676, "win_rate": 52.6, "note": "协同机制频繁触发，交易过度，胜率下降"},
+      {"range": "6000-12000", "trades": 10, "net": 50912, "win_rate": 100.0, "note": "边界扩大后协同几乎不触发，PrevClose完美运行"},
+      {"range": "5000-12000 (V3推荐)", "trades": 10, "net": 50912, "win_rate": 100.0, "note": "同6000-12000，推荐使用"},
+      {"range": "4000-14000", "trades": 10, "net": 50912, "win_rate": 100.0, "note": "进一步扩大无影响，V3边界最优"}
+    ],
+    "conclusion": "7000-11000旧边界因协同机制频繁触发反而降低表现；扩大至5000-12000后协同不触发，净利$50,912"
+  },
+
+  "live_trading_notes": [
+    "V3参数（2000股/笔）需注意：单笔最大资金占用约$30,000，需确保资金充足不爆仓",
+    "期末持仓10,894股（期末价格$10.76），相比起始8,894股增加2,000股，需监控期末效应",
+    "Bo+5%在Phase1暴涨期表现优异，但在震荡市可能过早卖出错过更多利润",
+    "S12%触发频率较低（全年约6次A卖出），需耐心等待",
+    "建议实盘先用V2（1000股/笔）运行3-6个月，验证后再切换V3"
+  ],
+
+  "strategy_evolution": {
+    "V1": {"sell_t": 0.10, "A_offset": 0.0, "B_offset": 0.0, "shares": 1000, "range": "7000-11000", "net": 18843, "excess": 9.72},
+    "V2": {"sell_t": 0.12, "A_offset": -0.01, "B_offset": 0.05, "shares": 1000, "range": "7000-11000", "net": 25456, "excess": 11.99},
+    "V3": {"sell_t": 0.12, "A_offset": -0.01, "B_offset": 0.05, "shares": 2000, "range": "5000-12000", "net": 50912, "excess": 16.35}
+  }
+}

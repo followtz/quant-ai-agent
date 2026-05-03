@@ -1,0 +1,44 @@
+{
+  "level": "WARNING",
+  "issues": [
+    "Panel 8080 not responding",
+    "Panel 8081 not responding"
+  ],
+  "details": {
+    "processes": {
+      "panel_8080": 608,
+      "panel_8081": 3784,
+      "opend": 3900,
+      "all_ok": 3900
+    },
+    "panels": {
+      "8080": null,
+      "8081": null
+    },
+    "logs": {
+      "btdr": {
+        "ok": true,
+        "file": "C:\\Trading\\logs\\prev_close_v2_20260414.log",
+        "age_min": 0.7
+      },
+      "ll": {
+        "ok": false,
+        "file": null,
+        "age_min": null
+      }
+    },
+    "state_files": {
+      "btdr_v2": {
+        "ok": true,
+        "file": "C:\\Trading\\data\\prev_close_v2_state.json",
+        "age_min": 0.0
+      },
+      "ll_v4": {
+        "ok": false,
+        "file": "C:\\Users\\Administrator\\Desktop\\量化AI公司\\01_策略库\\连连数字\\实盘策略核心文件\\连连数字V4策略全套文件\\v4_live_state.json",
+        "age_min": null
+      }
+    }
+  },
+  "timestamp": "2026-04-14T06:53:02.087606"
+}

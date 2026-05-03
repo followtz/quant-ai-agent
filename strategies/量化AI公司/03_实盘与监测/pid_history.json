@@ -1,0 +1,17 @@
+{
+  "last_pid": 364,
+  "changes": [
+    {
+      "time": "2026-04-20T22:56:38.738673",
+      "old_pid": null,
+      "new_pid": 364,
+      "note": "Initial discovery"
+    },
+    {
+      "time": "2026-04-22T09:05:39.678064",
+      "old_pid": 364,
+      "new_pid": 8984,
+      "note": "Auto-tracking"
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+[
+  {
+    "code": "MSTR",
+    "name": "MicroStrategy",
+    "volume": 3000000,
+    "turnover": 80000000,
+    "market_cap": 40000000000,
+    "volatility": 0.08,
+    "hv20": 0.85,
+    "btc_correlation": 0.88,
+    "btdr_correlation": 0.75,
+    "short_ratio": 0.15,
+    "institution_holding": 0.45,
+    "liquidity_score": 16.666666666666664,
+    "volatility_score": 25.0,
+    "strategy_score": 30.0,
+    "fundamental_score": 9.5,
+    "risk_score": 8.5,
+    "total_score": 89.66666666666666,
+    "grade": "A级-优先纳入",
+    "pass_items": [
+      "成交量达标: 3.0M股",
+      "成交额达标: $80.0M",
+      "市值合规: $40.0B",
+      "振幅达标: 8.0%",
+      "HV20达标: 85.0%"
+    ],
+    "fail_items": [],
+    "recommendations": [
+      "优先启动影子模式验证",
+      "波动率优秀，日内交易机会多",
+      "策略适配度极高，PrevClose规律可能存在",
+      "BTC联动性强，适合BTC相关策略"
+    ]
+  },
+  {
+    "code": "COIN",
+    "name": "Coinbase",
+    "volume": 8000000,
+    "turnover": 150000000,
+    "market_cap": 50000000000,
+    "volatility": 0.04,
+    "hv20": 0.45,
+    "btc_correlation": 0.7,
+    "btdr_correlation": 0.6,
+    "short_ratio": 0.1,
+    "institution_holding": 0.55,
+    "liquidity_score": 21.0,
+    "volatility_score": 13.75,
+    "strategy_score": 26.0,
+    "fundamental_score": 10.0,
+    "risk_score": 10.0,
+    "total_score": 80.75,
+    "grade": "A级-优先纳入",
+    "pass_items": [
+      "成交量达标: 8.0M股",
+      "成交额达标: $150.0M",
+      "市值合规: $50.0B",
+      "振幅达标: 4.0%",
+      "HV20达标: 45.0%"
+    ],
+    "fail_items": [],
+    "recommendations": [
+      "优先启动影子模式验证",
+      "流动性优秀，适合大资金",
+      "策略适配度极高，PrevClose规律可能存在",
+      "BTC联动性强，适合BTC相关策略",
+      "波动率偏低，考虑期权策略"
+    ]
+  },
+  {
+    "code": "CLSK",
+    "name": "CleanSpark",
+    "volume": 8000000,
+    "turnover": 25000000,
+    "market_cap": 1800000000,
+    "volatility": 0.06,
+    "hv20": 0.6,
+    "btc_correlation": 0.65,
+    "btdr_correlation": 0.55,
+    "short_ratio": 0.2,
+    "institution_holding": 0.35,
+    "liquidity_score": 15.444444444444445,
+    "volatility_score": 20.0,
+    "strategy_score": 24.0,
+    "fundamental_score": 8.5,
+    "risk_score": 8.0,
+    "total_score": 75.94444444444444,
+    "grade": "B级-观察纳入",
+    "pass_items": [
+      "成交量达标: 8.0M股",
+      "成交额达标: $25.0M",
+      "市值合规: $1.8B",
+      "振幅达标: 6.0%",
+      "HV20达标: 60.0%"
+    ],
+    "fail_items": [],
+    "recommendations": [
+      "波动率优秀，日内交易机会多",
+      "BTC联动性强，适合BTC相关策略"
+    ]
+  },
+  {
+    "code": "MARA",
+    "name": "Marathon Digital",
+    "volume": 12000000,
+    "turnover": 35000000,
+    "market_cap": 1500000000,
+    "volatility": 0.05,
+    "hv20": 0.55,
+    "btc_correlation": 0.6,
+    "btdr_correlation": 0.5,
+    "short_ratio": 0.28,
+    "institution_holding": 0.4,
+    "liquidity_score": 19.0,
+    "volatility_score": 17.25,
+    "strategy_score": 22.0,
+    "fundamental_score": 9.0,
+    "risk_score": 6.799999999999999,
+    "total_score": 74.05,
+    "grade": "B级-观察纳入",
+    "pass_items": [
+      "成交量达标: 12.0M股",
+      "成交额达标: $35.0M",
+      "市值合规: $1.5B",
+      "振幅达标: 5.0%",
+      "HV20达标: 55.0%"
+    ],
+    "fail_items": [],
+    "recommendations": [
+      "BTC联动性强，适合BTC相关策略",
+      "做空比例偏高，注意逼空风险"
+    ]
+  },
+  {
+    "code": "RIOT",
+    "name": "Riot Platforms",
+    "volume": 15000000,
+    "turnover": 28000000,
+    "market_cap": 1200000000,
+    "volatility": 0.05,
+    "hv20": 0.5,
+    "btc_correlation": 0.55,
+    "btdr_correlation": 0.48,
+    "short_ratio": 0.32,
+    "institution_holding": 0.38,
+    "liquidity_score": 18.444444444444443,
+    "volatility_score": 16.5,
+    "strategy_score": 20.5,
+    "fundamental_score": 8.8,
+    "risk_score": 6.4,
+    "total_score": 70.64444444444445,
+    "grade": "B级-观察纳入",
+    "pass_items": [
+      "成交量达标: 15.0M股",
+      "成交额达标: $28.0M",
+      "市值合规: $1.2B",
+      "振幅达标: 5.0%",
+      "HV20达标: 50.0%"
+    ],
+    "fail_items": [],
+    "recommendations": [
+      "做空比例偏高，注意逼空风险"
+    ]
+  },
+  {
+    "code": "WULF",
+    "name": "TeraWulf",
+    "volume": 5000000,
+    "turnover": 9000000,
+    "market_cap": 500000000,
+    "volatility": 0.075,
+    "hv20": 0.7,
+    "btc_correlation": 0.5,
+    "btdr_correlation": 0.42,
+    "short_ratio": 0.18,
+    "institution_holding": 0.25,
+    "liquidity_score": 10.88888888888889,
+    "volatility_score": 23.25,
+    "strategy_score": 18.0,
+    "fundamental_score": 7.5,
+    "risk_score": 8.2,
+    "total_score": 67.83888888888889,
+    "grade": "B级-观察纳入",
+    "pass_items": [
+      "成交量达标: 5.0M股",
+      "成交额达标: $9.0M",
+      "市值合规: $0.5B",
+      "振幅达标: 7.5%",
+      "HV20达标: 70.0%"
+    ],
+    "fail_items": [],
+    "recommendations": [
+      "波动率优秀，日内交易机会多",
+      "注意流动性风险，控制仓位"
+    ]
+  },
+  {
+    "code": "HUT",
+    "name": "Hut 8 Corp",
+    "volume": 6000000,
+    "turnover": 12000000,
+    "market_cap": 800000000,
+    "volatility": 0.065,
+    "hv20": 0.6,
+    "btc_correlation": 0.5,
+    "btdr_correlation": 0.4,
+    "short_ratio": 0.15,
+    "institution_holding": 0.3,
+    "liquidity_score": 11.88888888888889,
+    "volatility_score": 20.75,
+    "strategy_score": 17.5,
+    "fundamental_score": 8.0,
+    "risk_score": 8.5,
+    "total_score": 66.63888888888889,
+    "grade": "B级-观察纳入",
+    "pass_items": [
+      "成交量达标: 6.0M股",
+      "成交额达标: $12.0M",
+      "市值合规: $0.8B",
+      "振幅达标: 6.5%",
+      "HV20达标: 60.0%"
+    ],
+    "fail_items": [],
+    "recommendations": [
+      "波动率优秀，日内交易机会多",
+      "注意流动性风险，控制仓位"
+    ]
+  },
+  {
+    "code": "CIFR",
+    "name": "Cipher Mining",
+    "volume": 4000000,
+    "turnover": 8000000,
+    "market_cap": 600000000,
+    "volatility": 0.06,
+    "hv20": 0.65,
+    "btc_correlation": 0.55,
+    "btdr_correlation": 0.45,
+    "short_ratio": 0.22,
+    "institution_holding": 0.2,
+    "liquidity_score": 8.999999999999998,
+    "volatility_score": 20.5,
+    "strategy_score": 19.75,
+    "fundamental_score": 7.0,
+    "risk_score": 7.7,
+    "total_score": 63.95,
+    "grade": "B级-观察纳入",
+    "pass_items": [
+      "成交量达标: 4.0M股",
+      "成交额达标: $8.0M",
+      "市值合规: $0.6B",
+      "振幅达标: 6.0%",
+      "HV20达标: 65.0%"
+    ],
+    "fail_items": [],
+    "recommendations": [
+      "波动率优秀，日内交易机会多",
+      "注意流动性风险，控制仓位"
+    ]
+  }
+]

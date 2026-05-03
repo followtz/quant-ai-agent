@@ -1,0 +1,10 @@
+{
+  "strategy": "scaled_t0_v3",
+  "description": "2L@2/5%|1L@1.5%|T2%|none|none",
+  "total_pnl": 1528.0000000000007,
+  "avg_daily": 26.344827586206907,
+  "win_rate": 46.55172413793103,
+  "sharpe": 2.669476221647247,
+  "max_drawdown": -721.0999999999998,
+  "backtest_days": 58
+}

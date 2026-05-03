@@ -1,0 +1,16 @@
+{
+  "model": "DeepSeek V4 Flash",
+  "monthly_limit": 300000000,
+  "daily_limit": 40000000,
+  "warning_threshold_daily": 30000000,
+  "critical_threshold_daily": 40000000,
+  "cost_per_million_input": 0.14,
+  "cost_per_million_output": 0.28,
+  "cost_per_million_cache": 0.028,
+  "estimated_monthly_cost_cny": 45,
+  "monitoring_mode": "exact",
+  "monitoring_tool": "session_status",
+  "fuse_enabled": false,
+  "note": "DeepSeek 成本极低，3亿/月仅约¥45，仅监控不熔断",
+  "last_updated": "2026-05-03"
+}

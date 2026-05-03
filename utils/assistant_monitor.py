@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 # 添加utils路径
-sys.path.insert(0, r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e')
+sys.path.insert(0, '/home/ubuntu/.openclaw/workspace')
 
 try:
     from utils.wechat_push import push_report
@@ -52,8 +52,8 @@ class AssistantMonitor:
     }
     
     def __init__(self, skill_dir: Optional[str] = None):
-        self.skill_dir = skill_dir or r"C:\Program Files\QClaw\resources\openclaw\config\skills\xbrowser"
-        self.status_file = Path(r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e\data\dashboard\assistant_status.json')
+        self.skill_dir = skill_dir or '/home/ubuntu/.openclaw/workspace'
+        self.status_file = Path('/home/ubuntu/.openclaw/workspace/data/dashboard/assistant_status.json')
         self.status_file.parent.mkdir(parents=True, exist_ok=True)
         self.last_status = self._load_last_status()
         

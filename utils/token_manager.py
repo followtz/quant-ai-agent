@@ -241,7 +241,7 @@ class TokenManager:
 
 if __name__ == '__main__':
     # 测试
-    workspace = r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e'
+    workspace = '/home/ubuntu/.openclaw/workspace'
     tm = TokenManager(workspace)
     
     # 获取今日使用情况

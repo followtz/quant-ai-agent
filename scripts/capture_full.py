@@ -57,7 +57,7 @@ w, h = img.size
 print(f'Full window: {w}x{h}, rect={rect}')
 
 # 保存完整截图
-img.save(r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e\scripts\screenshots\qclaw_full.png')
+img.save(r'/home/ubuntu/.openclaw/workspace/scripts/screenshots\qclaw_full.png')
 print('Full screenshot saved')
 
 # 裁剪右上角区域（包含标题栏）
@@ -71,6 +71,6 @@ regions = [
 for name, box in regions:
     crop = img.crop(box)
     safe_name = name.replace(' ', '_')
-    filename = rf'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e\scripts\screenshots\corner_{safe_name}.png'
+    filename = rf'/home/ubuntu/.openclaw/workspace/scripts/screenshots\corner_{safe_name}.png'
     crop.save(filename)
     print(f'{name}: {box} -> {crop.size[0]}x{crop.size[1]}')

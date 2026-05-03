@@ -1,16 +1,17 @@
 {
   "model": "DeepSeek V4 Flash",
-  "monthly_limit": 300000000,
-  "daily_limit": 40000000,
-  "warning_threshold_daily": 30000000,
-  "critical_threshold_daily": 40000000,
+  "monthly_budget_cny": 500,
+  "monthly_token_capacity_mixed": 2550000000,
+  "monthly_token_capacity_output_only": 1786000000,
+  "daily_limit_hard": 85000000,
+  "daily_warning": 50000000,
+  "daily_critical": 80000000,
   "cost_per_million_input": 0.14,
   "cost_per_million_output": 0.28,
   "cost_per_million_cache": 0.028,
-  "estimated_monthly_cost_cny": 45,
   "monitoring_mode": "exact",
   "monitoring_tool": "session_status",
   "fuse_enabled": false,
-  "note": "DeepSeek 成本极低，3亿/月仅约¥45，仅监控不熔断",
+  "note": "¥500/月预算，对应~25.5亿Token/月。DeepSeek极便宜，日8000万以下很安全。仅监控不熔断。旧系统基线30-40M/天保留做参考。",
   "last_updated": "2026-05-03"
 }

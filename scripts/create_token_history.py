@@ -5,7 +5,7 @@ import os
 from collections import defaultdict
 
 # 创建数据目录
-os.makedirs(r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e\data\history', exist_ok=True)
+os.makedirs(r'/home/ubuntu/.openclaw/workspace/data/history', exist_ok=True)
 
 # 解析Token数据
 records = []
@@ -148,7 +148,7 @@ data_23 = [
 all_data = data_21 + data_22 + data_23
 
 # 写入CSV
-csv_path = r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e\data\history\token_usage_history.csv'
+csv_path = r'/home/ubuntu/.openclaw/workspace/data/history\token_usage_history.csv'
 with open(csv_path, 'w', newline='', encoding='utf-8-sig') as f:
     writer = csv.writer(f)
     writer.writerow(['timestamp', 'task_name', 'token_used', 'task_type', 'date', 'hour'])

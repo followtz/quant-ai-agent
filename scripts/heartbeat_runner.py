@@ -12,7 +12,7 @@ import requests
 from pathlib import Path
 
 # 添加工作区路径
-WORKSPACE = r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e'
+WORKSPACE = '/home/ubuntu/.openclaw/workspace'
 sys.path.insert(0, WORKSPACE)
 
 from utils.token_manager import TokenManager

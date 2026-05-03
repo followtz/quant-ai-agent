@@ -50,7 +50,7 @@ print(f'Window: {w}x{h}')
 # 比例约 1.24:1
 
 # 尝试多个Y坐标位置
-screenshot_dir = r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e\scripts\screenshots'
+screenshot_dir = r'/home/ubuntu/.openclaw/workspace/scripts/screenshots'
 ts = datetime.now().strftime('%Y%m%d_%H%M%S')
 
 # 根据用户截图分析：Token在界面最顶部右侧

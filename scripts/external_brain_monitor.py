@@ -9,7 +9,7 @@ import json
 import datetime
 from collections import defaultdict
 
-WORKSPACE = r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e'
+WORKSPACE = '/home/ubuntu/.openclaw/workspace'
 sys.path.insert(0, WORKSPACE)
 
 

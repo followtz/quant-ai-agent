@@ -8,7 +8,7 @@ import json
 import datetime
 from typing import Dict, Optional
 
-WORKSPACE = r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e'
+WORKSPACE = '/home/ubuntu/.openclaw/workspace'
 
 
 class GoldenStateManager:

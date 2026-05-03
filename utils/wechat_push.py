@@ -21,7 +21,7 @@ from typing import Optional
 
 WORKSPACE = Path(__file__).parent.parent
 CONFIG_FILE = WORKSPACE / "config" / "notify_config.json"
-EMAIL_SCRIPT = r"C:\Program Files\QClaw\resources\openclaw\config\skills\public-skill\scripts\windows\email_gateway.cmd"
+EMAIL_SCRIPT = '/home/ubuntu/.openclaw/workspace/utils/email_sender.py'
 DEFAULT_TO_EMAIL = "126959876@qq.com"
 DEFAULT_WECOM_USER = "TongZhuang"
 

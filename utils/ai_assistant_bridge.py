@@ -84,7 +84,7 @@ class AIAssistantBridge:
             skill_dir: xbrowser skill目录路径
         """
         self.browser = browser
-        self.skill_dir = skill_dir or r"C:\Program Files\QClaw\resources\openclaw\config\skills\xbrowser"
+        self.skill_dir = skill_dir or '/home/ubuntu/.openclaw/workspace'
         self.current_tab = None
         self._last_snapshot = None
         

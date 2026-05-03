@@ -281,7 +281,7 @@ class PromptUpdater:
 
 if __name__ == '__main__':
     # 测试
-    workspace = r'C:\Users\Administrator\.qclaw\workspace-agent-40f5a53e'
+    workspace = '/home/ubuntu/.openclaw/workspace'
     updater = PromptUpdater(workspace)
     
     result = updater.update()

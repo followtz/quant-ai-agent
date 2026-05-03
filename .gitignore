@@ -28,3 +28,4 @@ Thumbs.db
 
 # OpenClaw internal
 .openclaw/
+.venv/
